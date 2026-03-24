@@ -2,7 +2,7 @@
 
 `kingscript-code-generator` 是一个面向 Kingscript 二开场景的 skill 包，用于帮助 AI 助手生成、解释、审查和修改 Kingscript 代码，并结合本地参考资料完成更稳妥的实现。
 
-这个目录是 `kingscript-skill` 仓库中的一个具体 skill 子目录，不代表整个 skills 仓库本身。
+这个目录是 `kingscript-skills` 仓库中的一个具体 skill 子目录，不代表整个 skills 仓库本身。
 
 ## 目录结构
 
