@@ -1,4 +1,4 @@
-# kingscript-skill
+# kingscript-skills
 
 This repository is organized as a container for one or more Kingscript-related skills.
 
