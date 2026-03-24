@@ -6,7 +6,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$SkillName = "kingscript-expert"
+$SkillName = "kingscript-code-generator"
 $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 function Get-DefaultTargetDir {
@@ -94,12 +94,12 @@ if (Test-Path $TargetDir) {
 }
 
 New-Item -ItemType Directory -Path $TargetDir -Force | Out-Null
-Copy-DirectoryContent -Source (Join-Path $ScriptRoot "core") -Destination (Join-Path $TargetDir "core")
+Copy-DirectoryContent -Source (Join-Path $ScriptRoot "references") -Destination (Join-Path $TargetDir "references")
 
 switch ($Platform) {
     "codex" {
         $rootReplacements = @{
-            "../core/" = "./core/"
+            "../references/" = "./references/"
         }
         Copy-TextFileWithReplacements -Source (Join-Path $ScriptRoot "codex\SKILL.md") -Destination (Join-Path $TargetDir "SKILL.md") -Replacements $rootReplacements
         Copy-TextFileWithReplacements -Source (Join-Path $ScriptRoot "codex\AGENTS.md") -Destination (Join-Path $TargetDir "AGENTS.md") -Replacements $rootReplacements
@@ -107,20 +107,20 @@ switch ($Platform) {
     }
     "qoder" {
         Copy-TextFileWithReplacements -Source (Join-Path $ScriptRoot "qoder\SKILL.md") -Destination (Join-Path $TargetDir "SKILL.md") -Replacements @{
-            "../core/" = "./core/"
+            "../references/" = "./references/"
         }
     }
     "claude" {
         Copy-FileToRoot -Source (Join-Path $ScriptRoot "claude-code\SKILL.md") -DestinationDir $TargetDir -DestinationName "SKILL.md"
         Copy-TextFileWithReplacements -Source (Join-Path $ScriptRoot "claude-code\CLAUDE.md") -Destination (Join-Path $TargetDir "CLAUDE.md") -Replacements @{
-            "../core/" = "./core/"
+            "../references/" = "./references/"
         }
 
         $commandsDir = Join-Path $TargetDir "commands"
         New-Item -ItemType Directory -Path $commandsDir -Force | Out-Null
         Get-ChildItem -Path (Join-Path $ScriptRoot "claude-code\commands") -File | ForEach-Object {
             Copy-TextFileWithReplacements -Source $_.FullName -Destination (Join-Path $commandsDir $_.Name) -Replacements @{
-                "../../core/" = "../core/"
+                "../../references/" = "../references/"
             }
         }
     }

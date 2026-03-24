@@ -29,9 +29,9 @@ node_modules/
 # --- SDK 生成清单 ---
 # 仓库默认保留轻量清单，便于直接使用。
 # 全量方法清单体积较大，不默认提交到 GitHub 仓库。
-core/sdk/manifests/methods.json
-core/sdk/manifests/methods-*.json
-core/sdk/manifests/*.json.gz
+references/sdk/manifests/methods.json
+references/sdk/manifests/methods-*.json
+references/sdk/manifests/*.json.gz
 
 # --- 日志与临时文件 ---
 *.log

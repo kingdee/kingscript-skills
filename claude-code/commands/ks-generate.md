@@ -4,9 +4,11 @@
 
 ## 优先阅读
 
-1. `../../core/docs/api-boundaries.md`
-2. `../../core/templates/generate-template.md`
-3. `../../core/examples/` 中最相关的文件
+1. `../../references/templates/README.md`
+2. `../../references/templates/` 中最相关的模板
+3. `../../references/examples/` 中最相关的文件
+4. 如果涉及 SDK，再读 `../../references/sdk/`
+5. 如果涉及语法限制，再读 `../../references/language/kingscript/README.md`
 
 ## 输出格式
 

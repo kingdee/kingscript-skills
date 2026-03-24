@@ -4,9 +4,10 @@
 
 ## 优先阅读
 
-1. `../../core/templates/review-template.md`
-2. `../../core/checklists/review-checklist.md`
-3. `../../core/checklists/safety-checklist.md`
+1. `../../references/examples/` 中最相关的示例
+2. `../../references/templates/` 中最接近的插件模板
+3. `../../references/sdk/` 中涉及的类、方法和生命周期说明
+4. `../../references/language/kingscript/README.md` 中相关语法约束
 
 ## 输出格式
 

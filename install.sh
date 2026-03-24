@@ -6,7 +6,7 @@ set -euo pipefail
 
 PLATFORM="${1:-codex}"
 TARGET_DIR="${2:-}"
-SKILL_NAME="kingscript-expert"
+SKILL_NAME="kingscript-code-generator"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 copy_dir_contents() {
@@ -75,23 +75,23 @@ echo "目标目录：$TARGET_DIR"
 rm -rf "$TARGET_DIR"
 mkdir -p "$TARGET_DIR"
 
-copy_dir_contents "$SCRIPT_DIR/core" "$TARGET_DIR/core"
+copy_dir_contents "$SCRIPT_DIR/references" "$TARGET_DIR/references"
 
 case "$PLATFORM" in
   codex)
-    copy_text_with_replacements "$SCRIPT_DIR/codex/SKILL.md" "$TARGET_DIR/SKILL.md" "\\.\\./core/" "./core/"
-    copy_text_with_replacements "$SCRIPT_DIR/codex/AGENTS.md" "$TARGET_DIR/AGENTS.md" "\\.\\./core/" "./core/"
+    copy_text_with_replacements "$SCRIPT_DIR/codex/SKILL.md" "$TARGET_DIR/SKILL.md" "\\.\\./references/" "./references/"
+    copy_text_with_replacements "$SCRIPT_DIR/codex/AGENTS.md" "$TARGET_DIR/AGENTS.md" "\\.\\./references/" "./references/"
     copy_dir_contents "$SCRIPT_DIR/codex/agents" "$TARGET_DIR/agents"
     ;;
   qoder)
-    copy_text_with_replacements "$SCRIPT_DIR/qoder/SKILL.md" "$TARGET_DIR/SKILL.md" "\\.\\./core/" "./core/"
+    copy_text_with_replacements "$SCRIPT_DIR/qoder/SKILL.md" "$TARGET_DIR/SKILL.md" "\\.\\./references/" "./references/"
     ;;
   claude)
     copy_file_to_root "$SCRIPT_DIR/claude-code/SKILL.md" "$TARGET_DIR" "SKILL.md"
-    copy_text_with_replacements "$SCRIPT_DIR/claude-code/CLAUDE.md" "$TARGET_DIR/CLAUDE.md" "\\.\\./core/" "./core/"
+    copy_text_with_replacements "$SCRIPT_DIR/claude-code/CLAUDE.md" "$TARGET_DIR/CLAUDE.md" "\\.\\./references/" "./references/"
     mkdir -p "$TARGET_DIR/commands"
     for file in "$SCRIPT_DIR"/claude-code/commands/*.md; do
-      copy_text_with_replacements "$file" "$TARGET_DIR/commands/$(basename "$file")" "\\.\\./\\.\\./core/" "../core/"
+      copy_text_with_replacements "$file" "$TARGET_DIR/commands/$(basename "$file")" "\\.\\./\\.\\./references/" "../references/"
     done
     ;;
 esac

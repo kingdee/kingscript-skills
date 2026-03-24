@@ -1,59 +1,44 @@
 ---
-name: kingscript-expert
-description: "用于处理苍穹平台 Kingscript 二开任务，包括脚本生成或修改、SDK 声明解释、Java 开放能力映射、运行时错误诊断、定制化风险审查或实现模式设计。优先使用已有文档边界和本地示例，不编造私有 API 或假设后端能力已开放。"
+name: kingscript-code-generator
+description: "用于处理 Kingscript 定制化任务，包括脚本生成或修改、SDK 声明解释、Java 开放能力映射、运行时错误诊断、实现风险审查或二开模式设计。优先复用共享的示例、脚手架、SDK 索引和语法索引，不编造不可用的 API。"
 ---
 
 # Kingscript 专家
 
-作为 Kingscript 定制化工作的领域适配器使用。
-
-## 职责
-
-- 协助脚本生成、修改、调试、API 解释、设计和审查。
-- 严格在已确认的 Kingscript、SDK、运行时、权限和租户边界内工作。
-- 优先复用本地示例和模板，再起草新代码。
+作为 Codex 处理 Kingscript 二开任务的入口 skill 使用。
 
 ## 优先阅读
 
-1. 先阅读 `../core/docs/content-map.md` 了解知识存放位置。
-2. 编写任何代码或解释前，先阅读 `../core/docs/api-boundaries.md`。
-3. 当任务依赖平台背景时，阅读 `../core/docs/concepts.md`。
+1. 先找 `../references/examples/` 中最接近的示例
+2. 如果需要插件骨架或占位代码，读 `../references/templates/README.md`
+3. 如果涉及 SDK，先读 `../references/sdk/README.md`、`../references/sdk/strategy.md` 和 `../references/sdk/indexes/`
+4. 如果涉及语法、关键字或语言限制，读 `../references/language/kingscript/README.md`
 
 ## 任务路由
 
 ### 生成或修改代码
 
-- 阅读 `../core/templates/generate-template.md` 或 `../core/templates/modify-template.md`
-- 然后阅读 `../core/examples/` 中最相关的示例
-- 如果需要插件脚手架，阅读 `../core/plugin-templates/README.md`
+- 先读 `../references/templates/`
+- 再读 `../references/examples/` 中最相关的示例
+- 生成代码时优先复用已有插件模板和事件写法
 
-### 解释 SDK 或 Java 桥接行为
+### 解释 SDK 或 Java 映射
 
-- 阅读 `../core/sdk/README.md`
-- 阅读 `../core/sdk/strategy.md`
-- 如果已知类名，先阅读 `../core/sdk/indexes/class-index.md`
-- 如果已知方法名或生命周期名，先阅读 `../core/sdk/indexes/method-index.md`
-- 如果只知道业务目标，先阅读 `../core/sdk/indexes/scenario-index.md`
-- 如果只知道关键词或用户口语，先阅读 `../core/sdk/indexes/keyword-index.md`
-- 如果是报错定位，先阅读 `../core/sdk/indexes/error-index.md`
-- 找到目标后，再阅读 `../core/sdk/classes/`、`../core/sdk/packages/`、`../core/sdk/plugins/` 或 `../core/sdk/microservices/` 中的具体文档
-- 如果知识卡和索引不足以回答，再读取 `../core/sdk/manifests/`
-- 仍不足时，再读取本地 `<本地 node_modules 路径>` 中与目标直接相关的 `.d.ts` 文件
-- 如果本地声明只能提供结构，无法解释语义，再查在线 Javadoc
-- 阅读 `../core/templates/java-bridge-template.md`
-- 如果运行时行为不明确，明确声明假设
+- 先读 `../references/sdk/README.md`
+- 再读 `../references/sdk/strategy.md`
+- 已知类名时优先读 `../references/sdk/indexes/class-index.md`
+- 已知方法名时优先读 `../references/sdk/indexes/method-index.md`
+- 只知道场景时优先读 `../references/sdk/indexes/scenario-index.md`
+- 只知道关键词时优先读 `../references/sdk/indexes/keyword-index.md`
+- 找到入口后，再读 `../references/sdk/classes/`、`../references/sdk/packages/`、`../references/sdk/plugins/`、`../references/sdk/microservices/`
+- 索引不足时，再降级到 `../references/sdk/manifests/`
+- 仍不足时，再读取本地最相关的 `.d.ts` 或在线 Javadoc
 
-### 诊断错误
+### 诊断问题或做风险审查
 
-- 阅读 `../core/docs/troubleshooting.md`
-- 阅读 `../core/docs/pitfalls.md`
-- 使用 `../core/templates/debug-template.md`
-
-### 审查或风险检查代码
-
-- 阅读 `../core/templates/review-template.md`
-- 阅读 `../core/checklists/review-checklist.md`
-- 阅读 `../core/checklists/safety-checklist.md`
+- 先找同类场景的 `../references/examples/`
+- 再核对 `../references/sdk/` 中的类、方法和生命周期说明
+- 最后核对 `../references/language/kingscript/README.md` 及相关语法条目
 
 ## 输出约定
 
@@ -67,7 +52,7 @@ description: "用于处理苍穹平台 Kingscript 二开任务，包括脚本生
 
 ## 不可违背的规则
 
-- 不得编造 Kingscript API、事件名或上下文对象结构。
-- 不得假设 TypeScript 声明保证运行时可用。
-- 不得忽略权限、租户隔离或生命周期时序。
-- 如果所需信息缺失，提供有界的假设方案，而非虚假确定答案。
+- 不得编造 Kingscript API、事件名或上下文对象结构
+- 不得假设 TypeScript 声明保证运行时可用
+- 不得忽略权限、租户隔离或生命周期时序
+- 如果信息缺失，提供有边界的假设方案，而不是虚假的确定答案
