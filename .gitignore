@@ -1,0 +1,45 @@
+# ===========================================
+# Kingscript Expert Skill - Git Ignore
+# ===========================================
+
+# --- 运行时数据 ---
+# Qoder 工具数据
+.qoder/
+
+# --- 系统文件 ---
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- IDE & 编辑器 ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+
+# --- 依赖 ---
+node_modules/
+
+# --- SDK 生成清单 ---
+# 仓库默认保留轻量清单，便于直接使用。
+# 全量方法清单体积较大，不默认提交到 GitHub 仓库。
+core/sdk/manifests/methods.json
+core/sdk/manifests/methods-*.json
+core/sdk/manifests/*.json.gz
+
+# --- 日志与临时文件 ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- 构建产物 ---
+dist/
+build/
+*.tgz

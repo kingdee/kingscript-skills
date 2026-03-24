@@ -1,0 +1,7 @@
+interface:
+  display_name: "Kingscript 二开专家助手"
+  short_description: "面向 Kingscript 二开的脚本生成、排障、SDK 解释与风险审查。"
+  default_prompt: "使用 $kingscript-expert 来帮助我生成、修改、调试或审查 Kingscript 定制化代码。"
+
+policy:
+  allow_implicit_invocation: true

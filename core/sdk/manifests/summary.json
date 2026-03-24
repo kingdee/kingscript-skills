@@ -1,0 +1,17 @@
+{
+    "generated_at": "2026-03-24 13:41:58",
+    "source": "<YOUR_LOCAL_NODE_MODULES>",
+    "dts_file_count": 1440,
+    "export_record_count": 10344,
+    "type_export_count": 5274,
+    "const_export_count": 5070,
+    "namespace_count": 1416,
+    "module_count": 21,
+    "package_count": 514,
+    "method_record_count": 46344,
+    "static_method_count": 5601,
+    "instance_method_count": 35875,
+    "constructor_count": 4868,
+    "lifecycle_method_count": 409,
+    "event_method_count": 113
+}
