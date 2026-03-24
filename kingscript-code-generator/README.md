@@ -1,19 +1,21 @@
-# Kingscript Skill
+# Kingscript Code Generator
 
-Kingscript Skill 是一个面向 Kingscript AI 的技能开发工程框架，旨在帮助开发者快速构建、集成和管理 AI 技能模块。通过该项目，可以将不同功能以 Skill 的形式进行组织，实现灵活扩展与复用，加速 AI 应用开发。
+`kingscript-code-generator` 是一个面向 Kingscript 二开场景的 skill 包，用于帮助 AI 助手生成、解释、审查和修改 Kingscript 代码，并结合本地参考资料完成更稳妥的实现。
 
-## 仓库结构
+这个目录是 `kingscript-skill` 仓库中的一个具体 skill 子目录，不代表整个 skills 仓库本身。
+
+## 目录结构
 
 ```text
-kingscript-skill/
+kingscript-code-generator/
 ├─ references/
 │  ├─ examples/      # 代码示例
 │  ├─ templates/     # 插件模板
 │  ├─ sdk/           # SDK 声明、索引、开放能力映射
 │  └─ language/      # Kingscript 语法约束
-├─ codex/            # Codex 入口源码
-├─ qoder/            # Qoder 入口源码
-├─ claude-code/      # Claude Code 入口源码
+├─ codex/            # Codex 入口内容
+├─ qoder/            # Qoder 入口内容
+├─ claude-code/      # Claude Code 入口内容
 ├─ install.sh        # Linux / macOS 安装脚本
 └─ install.ps1       # Windows 安装脚本
 ```
@@ -23,7 +25,7 @@ kingscript-skill/
 - `references/` 只放平台无关的共享内容。
 - 平台差异只放在 `codex/`、`qoder/`、`claude-code/`。
 - 所有文档链接都使用仓库内相对路径，不写死本地绝对目录。
-- 当前版本聚焦“快速生成和解释 Kingscript 代码”。
+- 当前 skill 聚焦“快速生成、解释与审查 Kingscript 代码”。
 
 ## 安装
 
