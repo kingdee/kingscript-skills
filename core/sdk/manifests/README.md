@@ -22,6 +22,32 @@
   来完成大多数方法级检索。
 - 如果维护者需要完整方法级兜底能力，可以在本地重新生成 `methods.json`，或在 GitHub Release 中附带该文件。
 
+## Release 附件下载说明
+
+推荐把全量方法清单以 Release 附件形式分发，而不是直接放入仓库主分支。
+
+推荐附件名：
+
+- `methods.json.zip`
+
+使用方式：
+
+1. 从仓库 Release 页面下载附件
+2. 解压得到 `methods.json`
+3. 放入当前目录，即 `core/sdk/manifests/`
+4. 再结合：
+   - `core/sdk/indexes/method-index.md`
+   - `core/sdk/indexes/methods-by-name.md`
+   - `core/sdk/indexes/methods-hot.md`
+   - `core/sdk/indexes/methods-lifecycle.md`
+   使用
+
+这样做的目的是：
+
+- 保持 GitHub 仓库轻量
+- 让普通使用者 clone 即可用
+- 让需要全量方法级兜底的人按需增强
+
 ## 适合放什么
 
 - 全量类清单

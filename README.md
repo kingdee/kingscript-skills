@@ -152,6 +152,24 @@ kingscript-expert/
 - 体积较大的 `core/sdk/manifests/methods.json` 不作为 GitHub 仓库默认提交内容。
 - 如果需要全量方法级兜底能力，建议由维护者本地生成，或通过 GitHub Release 作为附加资产分发。
 
+### 获取 `methods.json` 增强包
+
+如果你需要完整的方法级兜底清单，请到仓库的 Release 页面下载附件：
+
+- 附件名建议为：`methods.json.zip`
+
+下载后：
+
+1. 解压附件
+2. 将得到的 `methods.json` 放入 `core/sdk/manifests/`
+3. 再按 `core/sdk/strategy.md` 中的检索降级链路使用
+
+适用场景：
+
+- 需要做全量方法名精确定位
+- 需要补充长尾 SDK 方法级解释
+- 需要在本地离线环境中增强方法检索能力
+
 ## 扩展建议
 
 | 内容类型 | 存放位置 |
