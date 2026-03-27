@@ -13,6 +13,7 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 2. 如果需要插件骨架，阅读 `./references/templates/`
 3. 如果涉及 SDK，先阅读 `./references/sdk/README.md`、`./references/sdk/strategy.md` 和 `./references/sdk/indexes/`
 4. 如果涉及语法或关键字，阅读 `./references/language/kingscript/README.md`
+5. 如果仓库内资料不足且本地挂载了外部知识盘，按 `./references/sdk/strategy.md` 进入外部扩展层，先读 `*-description.md`，需要真实写法或坑点时再读配套 `*-example.md`
 
 ## 输出约定
 

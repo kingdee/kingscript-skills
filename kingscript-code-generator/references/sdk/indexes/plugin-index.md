@@ -30,3 +30,63 @@
 
 - 与 `references/examples/plugins/` 保持互链
 - 与 `references/examples/plugins/` 保持互链
+
+## 当前高频插件类型入口
+
+### 表单插件
+
+- 常用基类：
+  - `AbstractFormPlugin`
+  - `AbstractBillPlugIn`
+- 高频事件：
+  - `preOpenForm`
+  - `beforeBindData`
+  - `afterBindData`
+  - `registerListener`
+  - `beforeFieldPostBack`
+  - `closedCallBack`
+  - `timerElapsed`
+  - `pageRelease`
+  - `setWaterMarkInfo`
+  - `beforeDoCheckDataPermission`
+- 相关 SDK：
+  - `packages/kd-bos-form-events.md`
+  - `classes/BeforeFieldPostBackEvent.md`
+  - `classes/BeforeDoCheckDataPermissionArgs.md`
+- 相关示例：
+  - `references/examples/plugins/插件示例/表单插件-事件拆分/`
+
+### 基础资料控件 / F7
+
+- 常用基类：
+  - `BasedataEdit`
+  - `BasedataEditListener`
+- 高频事件：
+  - `beforeF7Select`
+  - `afterF7Select`
+  - `beforeFilterF7Select`
+  - `beforeQuickAddNew`
+- 相关 SDK：
+  - `packages/kd-bos-form-field-events.md`
+  - `classes/BeforeF7SelectEvent.md`
+  - `classes/AfterF7SelectEvent.md`
+  - `classes/BeforeFilterF7SelectEvent.md`
+- 相关示例：
+  - `references/examples/plugins/插件示例/基础资料控件-事件拆分/`
+
+### 列表插件
+
+- 常用基类：
+  - `BillList`
+  - `ListView`
+- 高频事件：
+  - `listBeforeBindData`
+  - `beforePackageData`
+  - `dataSelect`
+  - `billClosedCallBack`
+- 相关 SDK：
+  - `packages/kd-bos-list-events.md`
+  - `classes/BeforePackageDataEvent.md`
+  - `classes/BillClosedCallBackEvent.md`
+- 相关示例：
+  - `references/examples/plugins/插件示例/列表插件-事件拆分/`

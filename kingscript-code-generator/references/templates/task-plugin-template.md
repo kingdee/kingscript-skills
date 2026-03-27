@@ -2,12 +2,13 @@
 
 ## 适用场景
 
-- 需要快速创建一个基于 `AbstractTask` 的后台任务插件
-- 先搭好任务骨架，再补充任务标识、消息处理和停止逻辑
+- 调度任务、后台任务、长耗时异步处理
 
-## 基类
+## 标准 import
 
-- `AbstractTask`
+```typescript
+import { AbstractTask } from "@cosmic/bos-core/kd/bos/schedule";
+```
 
 ## 模板代码
 
@@ -16,8 +17,13 @@ import { AbstractTask } from "@cosmic/bos-core/kd/bos/schedule";
 
 class MyPlugin extends AbstractTask {
 
+  setTaskId(taskId: string): void {
+    super.setTaskId(taskId);
+  }
 
-
+  stop(): void {
+    super.stop();
+  }
 }
 
 let plugin = new MyPlugin();
@@ -25,8 +31,13 @@ let plugin = new MyPlugin();
 export { plugin };
 ```
 
-## 使用说明
+## 起手建议
 
-- 先确认当前需求是否属于调度或后台任务场景
-- 按需补充 `setTaskId`、`setMessageHandle`、`stop` 等方法
-- 需要任务日志、消息处理和执行链路示例时，优先参考 `../examples/` 中的后台任务示例
+- 后台任务要优先考虑任务标识、日志、消息处理和可停止性。
+- 如果只是页面按钮点击后的即时逻辑，不要误用任务插件。
+- 长耗时任务优先把输入参数设计成简单值，不要直接传页面对象。
+
+## 下一步去哪看
+
+- 后台任务示例：`../examples/plugins/插件示例/后台任务.md`
+- 大任务示例：`../examples/plugins/插件示例/大任务插件.md`

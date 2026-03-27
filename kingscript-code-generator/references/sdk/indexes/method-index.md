@@ -235,6 +235,23 @@
 4. 根据 `target` 跳转到类知识卡或类索引
 5. 如果需要语义补充，再回退到本地 `.d.ts` 或在线 Javadoc
 
+## 当前优先补强的方法跳转
+
+| 方法名 | 优先跳转 | 相关示例 |
+|--------|----------|----------|
+| `registerListener` | `AbstractFormPlugin` | `references/examples/plugins/插件示例/表单插件-事件拆分/registerListener.md` |
+| `beforeFieldPostBack` | `BeforeFieldPostBackEvent` | `references/examples/plugins/插件示例/表单插件-事件拆分/beforeFieldPostBack.md` |
+| `closedCallBack` | `ClosedCallBackEvent` | `references/examples/plugins/插件示例/表单插件-事件拆分/closedCallBack.md` |
+| `beforePackageData` | `BeforePackageDataEvent` | `references/examples/plugins/插件示例/表单插件-事件拆分/beforePackageData.md` |
+| `beforeF7Select` | `BeforeF7SelectEvent` | `references/examples/plugins/插件示例/基础资料控件-事件拆分/beforeF7Select.md` |
+| `afterF7Select` | `AfterF7SelectEvent` | `references/examples/plugins/插件示例/基础资料控件-事件拆分/afterF7Select.md` |
+| `beforeFilterF7Select` | `BeforeFilterF7SelectEvent` | `references/examples/plugins/插件示例/基础资料控件-事件拆分/beforeFilterF7Select.md` |
+| `beforeQuickAddNew` | `BeforeQuickAddNewEvent` | `references/examples/plugins/插件示例/基础资料控件-事件拆分/beforeQuickAddNew.md` |
+| `billClosedCallBack` | `BillClosedCallBackEvent` | `references/examples/plugins/插件示例/列表插件-事件拆分/billClosedCallBack.md` |
+| `timerElapsed` | `AbstractFormPlugin` | `references/examples/plugins/插件示例/表单插件-事件拆分/timerElapsed.md` |
+| `pageRelease` | `AbstractFormPlugin` | `references/examples/plugins/插件示例/表单插件-事件拆分/pageRelease.md` |
+| `setWaterMarkInfo` | `AbstractFormPlugin` | `references/examples/plugins/插件示例/表单插件-事件拆分/setWaterMarkInfo.md` |
+
 ## 建设边界
 
 - 第一版已经完成“自动扫描生成 methods.json”

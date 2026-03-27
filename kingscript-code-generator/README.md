@@ -39,6 +39,8 @@ kingscript-code-generator/
 .\install.ps1 -Platform claude
 ```
 
+安装脚本会在复制完成后自动校验关键入口文件和 `references/` 是否存在。
+
 自定义目标目录：
 
 ```powershell
@@ -52,6 +54,8 @@ bash install.sh codex
 bash install.sh qoder
 bash install.sh claude
 ```
+
+Shell 脚本同样会在安装结束后做一次关键文件校验。
 
 自定义目标目录：
 
@@ -124,6 +128,28 @@ kingscript-code-generator/
 3. 新增 SDK 声明或索引放到 `references/sdk/`
 4. 新增语法约束放到 `references/language/`
 5. 平台适配只改对应平台目录，不把平台差异写进 `references/`
+
+### 外部知识盘（可选增强）
+
+这个 skill 默认依赖仓库内的 `references/` 完成检索，不要求额外挂载任何私有资料。
+
+如果维护者本地还有更完整的 SDK 文档包、反编译知识库或历史沉淀资料，可以把它们作为“外部知识盘”挂载使用，例如：
+
+- 通过环境变量 `BOS_DOCS_PATH` 指向外部资料目录
+- 或在当前工作区放置一个不提交到仓库的本地文档目录
+
+推荐的外部知识盘组织方式：
+
+- 每个对象尽量采用成对文件
+  - `*-description.md`：API、用途、方法列表、参数语义
+  - `*-example.md`：真实业务示例、坑点、防误用写法
+
+使用原则：
+
+- 外部知识盘是可选增强层，不是默认依赖。
+- 不把外部资料整包直接搬进 skill 仓库。
+- 优先把高频、高风险内容提炼成 `references/sdk/indexes/`、`references/sdk/classes/`、`references/sdk/packages/` 和 `references/examples/`。
+- 只有仓库内知识层不足时，才按 `references/sdk/strategy.md` 的规则降级到外部知识盘。
 
 ## 许可
 

@@ -142,6 +142,29 @@ sdk/
 - 高频服务助手、查询过滤、上下文、插件基类、序列化、数值与日期相关类型
 - 常见扩展点接口和高频插件类
 
+## 外部扩展知识盘（可选）
+
+这个 skill 默认只依赖仓库内的 `references/`，不要求维护者必须额外挂载私有资料。
+
+如果维护者本地还有更完整的 SDK 文档包、反编译知识库或历史沉淀资料，可以把它们作为“外部扩展知识盘”接入，建议：
+
+- 通过环境变量 `BOS_DOCS_PATH` 指向外部资料目录
+- 或在工作区中放一个不提交到仓库的本地文档目录
+
+推荐的外部资料组织方式：
+
+- `*-description.md`
+  - 负责 API、方法列表、参数语义、适用场景
+- `*-example.md`
+  - 负责真实业务代码、常见坑、联动写法
+
+使用原则：
+
+- 外部知识盘只作为长尾扩展层，不替代仓库内的 `indexes/`、`classes/`、`packages/`
+- 命中 `*-description.md` 后，先理解结构和语义
+- 只有在需要真实写法、运行时边界或防坑代码时，再补读配套 `*-example.md`
+- 不整包搬运外部资料进仓库，优先把高频内容沉淀回 `references/`
+
 ## 注意事项
 
 - 原始 SDK 清单、扫描结果、映射文件统一放在 `manifests/`
@@ -151,3 +174,16 @@ sdk/
 - 文档模板统一放在 `templates/`
 - 全量检索规则统一写在 `strategy.md`
 - 没有真实来源时，不要伪造任何 SDK 类、方法、参数或返回值
+
+## 本轮新增的高频入口
+
+- Java 与 Kingscript 类型桥接: `docs/java-kingscript-bridge.md`
+- 数据操作: `classes/DynamicObject.md`、`classes/DynamicObjectCollection.md`
+- 操作结果与校验: `classes/OperationResult.md`、`classes/ValidationErrorInfo.md`、`classes/ValidateResult.md`、`classes/ErrorLevel.md`
+- 模型联动: `classes/PropertyChangedArgs.md`
+- 高价值插件基类: `classes/AbstractListPlugin.md`、`classes/AbstractConvertPlugIn.md`、`classes/AbstractWriteBackPlugIn.md`
+- 操作上下文与扩展参数: `classes/FormOperate.md`、`classes/OperateOption.md`
+- 数据访问与异常: `classes/DBRoute.md`、`classes/KDException.md`
+- 单据体与元数据: `classes/EntryGrid.md`、`classes/SubEntryGrid.md`、`classes/EntityType.md`、`classes/MainEntityType.md`、`classes/EntryType.md`、`classes/SubEntryType.md`、`classes/EntityMetadataCache.md`
+- 基础资料与多选资料: `classes/BasedataEdit.md`、`classes/MulBasedataEdit.md`、`classes/BasedataProp.md`、`classes/MasterBasedataProp.md`、`classes/MulBasedataProp.md`
+- 弹性域入口: `classes/FlexEdit.md`、`classes/FlexEntityType.md`、`classes/FlexProperty.md`、`classes/FlexProp.md`

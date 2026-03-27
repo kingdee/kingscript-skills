@@ -21,6 +21,14 @@
 - `beforeLoadData` | 2 次 | 方法分类：生命周期方法 | 代表类：IPrintPlugin, IPrintServicePlugin
 - `propertyChanged` | 1 次 | 方法分类：生命周期方法 | 代表类：IDataModelChangeListener
 - `beforePropertyChanged` | 1 次 | 方法分类：生命周期方法 | 代表类：IDataModelChangeListener
+- `beforeFieldPostBack` | 未检出为统一生命周期方法 | 方法分类：高频页面事件 | 代表类：IFormPlugin
+- `closedCallBack` | 未检出为统一生命周期方法 | 方法分类：高频回调事件 | 代表类：IFormPlugin
+- `registerListener` | 未检出为统一生命周期方法 | 方法分类：高频初始化事件 | 代表类：IFormPlugin
+- `timerElapsed` | 未检出为统一生命周期方法 | 方法分类：高频页面事件 | 代表类：AbstractFormPlugin
+- `pageRelease` | 未检出为统一生命周期方法 | 方法分类：高频页面事件 | 代表类：AbstractFormPlugin
+- `setWaterMarkInfo` | 未检出为统一生命周期方法 | 方法分类：高频页面事件 | 代表类：AbstractFormPlugin
+- `billClosedCallBack` | 未检出为统一生命周期方法 | 方法分类：列表回调事件 | 代表类：IListPlugin
+- `beforeF7Select` | 2 次 | 方法分类：高频控件事件 | 代表类：BeforeF7SelectListener, BeforeFilterF7SelectListener
 - `createNewData` | 3 次 | 方法分类：实例方法 | 代表类：IDataModel, IDataModelListener
 - `afterCreateNewData` | 1 次 | 方法分类：生命周期方法 | 代表类：IDataModelListener
 
@@ -66,3 +74,38 @@
 - `afterReceiveResponse` | 2 次 | 2 个类 | ClientAjax, ResponseListener
 - `beforeF7Select` | 2 次 | 2 个类 | BeforeF7SelectListener, BeforeFilterF7SelectListener
 - `afterDoOperation` | 2 次 | 1 个类 | IFormPlugin
+
+## Kingscript 二开高频补充入口
+
+- `registerListener`
+  - 典型用途：注册按钮、分录行、F7、上传或自定义控件监听器
+  - 推荐先看：`AbstractFormPlugin`、`BeforeF7SelectEvent`、`AfterF7SelectEvent`
+  - 相关示例：`references/examples/plugins/插件示例/表单插件-事件拆分/registerListener.md`
+- `beforeFieldPostBack`
+  - 典型用途：减少无意义字段回传，提升页面录入性能
+  - 推荐先看：`BeforeFieldPostBackEvent`
+  - 相关示例：`references/examples/plugins/插件示例/表单插件-事件拆分/beforeFieldPostBack.md`
+- `closedCallBack`
+  - 典型用途：父页面接收子页面关闭通知，刷新局部数据
+  - 推荐先看：`CloseCallBack`、`ClosedCallBackEvent`
+  - 相关示例：`references/examples/plugins/插件示例/表单插件-事件拆分/closedCallBack.md`
+- `beforePackageData`
+  - 典型用途：列表数据绑定前补齐显示字段、格式化展示结果
+  - 推荐先看：`BeforePackageDataEvent`
+  - 相关示例：`references/examples/plugins/插件示例/表单插件-事件拆分/beforePackageData.md`
+- `timerElapsed`
+  - 典型用途：定时刷新看板、轮询任务状态、自动保存
+  - 推荐先看：`AbstractFormPlugin`
+  - 相关示例：`references/examples/plugins/插件示例/表单插件-事件拆分/timerElapsed.md`
+- `pageRelease`
+  - 典型用途：页面关闭后清理缓存、临时文件和定时器
+  - 推荐先看：`AbstractFormPlugin`
+  - 相关示例：`references/examples/plugins/插件示例/表单插件-事件拆分/pageRelease.md`
+- `setWaterMarkInfo`
+  - 典型用途：按状态动态设置水印文本、颜色和透明度
+  - 推荐先看：`AbstractFormPlugin`
+  - 相关示例：`references/examples/plugins/插件示例/表单插件-事件拆分/setWaterMarkInfo.md`
+- `billClosedCallBack`
+  - 典型用途：列表打开单据后，根据关闭回调刷新列表或补选中状态
+  - 推荐先看：`BillClosedCallBackEvent`
+  - 相关示例：`references/examples/plugins/插件示例/列表插件-事件拆分/billClosedCallBack.md`

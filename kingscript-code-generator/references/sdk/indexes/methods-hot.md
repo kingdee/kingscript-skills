@@ -40,3 +40,13 @@
 - `beforeClosed` | 页面关闭前处理。 | 3 次 | 代表类：DataSet$Listener, IFormPlugin
 - `createNewData` | 新建数据时的模型入口。 | 3 次 | 代表类：IDataModel, IDataModelListener
 - `afterCreateNewData` | 新建数据后扩展入口。 | 1 次 | 代表类：IDataModelListener
+- `registerListener` | 统一注册按钮、F7、上传与控件监听。 | 未检出 | 代表类：IFormPlugin
+- `beforeFieldPostBack` | 字段回传前拦截，常用于性能优化。 | 未检出 | 代表类：IFormPlugin
+- `closedCallBack` | 子页面关闭后回传父页面。 | 未检出 | 代表类：IFormPlugin
+- `timerElapsed` | 定时刷新、轮询与自动保存入口。 | 未检出 | 代表类：AbstractFormPlugin
+- `pageRelease` | 页面资源、缓存与定时器清理入口。 | 未检出 | 代表类：AbstractFormPlugin
+- `setWaterMarkInfo` | 按状态动态设置页面水印。 | 未检出 | 代表类：AbstractFormPlugin
+- `beforePackageData` | 列表数据显示前格式化或补字段。 | 2 次 | 代表类：BeforePackageDataListener, IListPlugin
+- `beforeF7Select` | F7 打开前改过滤条件和显示参数。 | 2 次 | 代表类：BeforeF7SelectListener, BeforeFilterF7SelectListener
+- `afterF7Select` | F7 选择完成后读取选中结果与回填信息。 | 未检出 | 代表类：AfterF7SelectListener
+- `billClosedCallBack` | 列表打开单据后的关闭回调入口。 | 未检出 | 代表类：IListPlugin

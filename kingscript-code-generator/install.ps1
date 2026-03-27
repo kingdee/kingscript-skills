@@ -81,6 +81,42 @@ function Copy-TextFileWithReplacements {
     [System.IO.File]::WriteAllText($Destination, $content, $utf8NoBom)
 }
 
+function Get-ExpectedEntries {
+    param([string]$SelectedPlatform)
+
+    $entries = @("references", "SKILL.md")
+
+    switch ($SelectedPlatform) {
+        "codex" {
+            $entries += @("AGENTS.md", "agents")
+        }
+        "claude" {
+            $entries += @("CLAUDE.md", "commands")
+        }
+    }
+
+    return $entries
+}
+
+function Test-InstalledBundle {
+    param(
+        [string]$SelectedPlatform,
+        [string]$Destination
+    )
+
+    $missing = @()
+    foreach ($entry in (Get-ExpectedEntries -SelectedPlatform $SelectedPlatform)) {
+        $target = Join-Path $Destination $entry
+        if (-not (Test-Path $target)) {
+            $missing += $entry
+        }
+    }
+
+    if ($missing.Count -gt 0) {
+        throw "Install verification failed. Missing entries: $($missing -join ', ')"
+    }
+}
+
 if (-not $TargetDir) {
     $TargetDir = Get-DefaultTargetDir -SelectedPlatform $Platform
 }
@@ -127,5 +163,7 @@ switch ($Platform) {
 }
 
 Write-Host ""
+Test-InstalledBundle -SelectedPlatform $Platform -Destination $TargetDir
+Write-Host "Verification passed." -ForegroundColor Green
 Write-Host "Install complete." -ForegroundColor Green
 Write-Host "Bundle path: $TargetDir" -ForegroundColor Cyan

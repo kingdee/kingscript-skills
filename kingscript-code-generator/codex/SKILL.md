@@ -32,6 +32,8 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 - 只知道关键词时优先读 `../references/sdk/indexes/keyword-index.md`
 - 找到入口后，再读 `../references/sdk/classes/`、`../references/sdk/packages/`、`../references/sdk/plugins/`、`../references/sdk/microservices/`
 - 索引不足时，再降级到 `../references/sdk/manifests/`
+- 如果维护者本地额外挂载了外部知识盘，再按 `strategy.md` 进入外部扩展层
+- 命中外部 `*-description.md` 时，先读描述卡；只有需要真实写法、坑点或运行时边界时，再继续读配套 `*-example.md`
 - 仍不足时，再读取本地最相关的 `.d.ts` 或在线 Javadoc
 
 ### 诊断问题或做风险审查

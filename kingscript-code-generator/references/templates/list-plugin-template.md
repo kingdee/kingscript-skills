@@ -2,22 +2,29 @@
 
 ## 适用场景
 
-- 需要快速创建一个基于 `AbstractListPlugin` 的列表插件
-- 先搭好插件骨架，再补充列表交互和展示逻辑
+- 列表默认过滤、选择联动、从列表打开单据后的回调处理
 
-## 基类
+## 标准 import
 
-- `AbstractListPlugin`
+```typescript
+import { AbstractListPlugin } from "@cosmic/bos-core/kd/bos/list/plugin";
+```
 
 ## 模板代码
 
 ```typescript
 import { AbstractListPlugin } from "@cosmic/bos-core/kd/bos/list/plugin";
+import { DataSelectEvent, ListBeforeBindDataEvent } from "@cosmic/bos-core/kd/bos/list/events";
 
 class MyPlugin extends AbstractListPlugin {
 
+  listBeforeBindData(e: ListBeforeBindDataEvent): void {
+    super.listBeforeBindData(e);
+  }
 
-
+  dataSelect(e: DataSelectEvent): void {
+    super.dataSelect(e);
+  }
 }
 
 let plugin = new MyPlugin();
@@ -25,8 +32,14 @@ let plugin = new MyPlugin();
 export { plugin };
 ```
 
-## 使用说明
+## 起手建议
 
-- 先确认当前场景是否属于列表插件
-- 按需补充列表事件或操作逻辑
-- 需要具体写法时优先参考 `../examples/` 中的列表插件示例
+- 列表初始化问题优先从 `listBeforeBindData` 开始。
+- 选中行驱动按钮状态、批量操作可用性时优先补 `dataSelect`。
+- 从列表打开单据再返回列表时，优先补 `billClosedCallBack`。
+
+## 下一步去哪看
+
+- 列表拆分示例：`../examples/plugins/插件示例/列表插件-事件拆分/README.md`
+- 列表总览：`../examples/plugins/插件示例/列表插件.md`
+- 相关参数卡：`../sdk/packages/kd-bos-list-events.md`

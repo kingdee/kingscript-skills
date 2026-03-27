@@ -5,6 +5,29 @@
 - 生成时间：2026-03-24 10:59:15
 - 包数：514
 
+## 当前优先关注的 BOS 包
+
+这些包已经在 `bos/bos` 中补充了较多事件信息，适合作为 Kingscript 二开高频入口优先阅读：
+
+| 包 | 优先原因 | 推荐包卡 |
+|----|----------|----------|
+| `kd/bos/form/events` | 表单插件生命周期、页面交互、权限前置校验集中在这里 | `../packages/kd-bos-form-events.md` |
+| `kd/bos/entity/datamodel` | 运行时模型、分录和数据包读写入口密集 | `../packages/kd-bos-entity-datamodel.md` |
+| `kd/bos/entity/datamodel/events` | 字段变化、分录增删改、批量赋值等事件集中 | `../packages/kd-bos-entity-datamodel-events.md` |
+| `kd/bos/form/field/events` | F7、基础资料选择、快捷新增事件集中 | `../packages/kd-bos-form-field-events.md` |
+| `kd/bos/list/events` | 列表绑定、选择、关闭回调等事件集中 | `../packages/kd-bos-list-events.md` |
+| `kd/bos/form/control/events` | 控件级交互、附件、提示和按钮事件密集 | `../packages/kd-bos-form-control-events.md` |
+
+## Kingscript 二开常用包速查
+
+| 场景 | 推荐包 | 说明 |
+|------|--------|------|
+| 表单生命周期 | `kd/bos/form/events` | `beforeFieldPostBack`、`beforeDoCheckDataPermission` 等入口 |
+| 分录与字段变化 | `kd/bos/entity/datamodel/events` | `propertyChanged`、`beforePropertyChanged`、分录移动与删除 |
+| F7 与基础资料 | `kd/bos/form/field/events` | 选择前过滤、选择后回填、快捷新增 |
+| 列表显示格式化 | `kd/bos/entity/datamodel/events` | `BeforePackageDataEvent` 用于列表显示前补字段 |
+| 列表回调 | `kd/bos/list/events` | 列表选择、关闭回调、绑定前事件 |
+
 ## @constellation/epm
 
 | 包 | 类型导出数 | 示例类型 |

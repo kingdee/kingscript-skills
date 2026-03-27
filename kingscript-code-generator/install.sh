@@ -1,6 +1,6 @@
 #!/bin/bash
-# 用法：
-#   bash install.sh [codex|qoder|claude] [可选目标目录]
+# Usage:
+#   bash install.sh [codex|qoder|claude] [optional-target-dir]
 
 set -euo pipefail
 
@@ -14,7 +14,7 @@ copy_dir_contents() {
   local destination="$2"
 
   if [ ! -d "$source" ]; then
-    echo "缺少源目录：$source" >&2
+    echo "Missing source directory: $source" >&2
     exit 1
   fi
 
@@ -28,7 +28,7 @@ copy_file_to_root() {
   local destination_name="$3"
 
   if [ ! -f "$source" ]; then
-    echo "缺少源文件：$source" >&2
+    echo "Missing source file: $source" >&2
     exit 1
   fi
 
@@ -43,12 +43,50 @@ copy_text_with_replacements() {
   local replacement="$4"
 
   if [ ! -f "$source" ]; then
-    echo "缺少源文件：$source" >&2
+    echo "Missing source file: $source" >&2
     exit 1
   fi
 
   mkdir -p "$(dirname "$destination")"
   sed "s|$pattern|$replacement|g" "$source" > "$destination"
+}
+
+expected_entries() {
+  local platform="$1"
+
+  case "$platform" in
+    codex)
+      printf '%s\n' "references" "SKILL.md" "AGENTS.md" "agents"
+      ;;
+    qoder)
+      printf '%s\n' "references" "SKILL.md"
+      ;;
+    claude)
+      printf '%s\n' "references" "SKILL.md" "CLAUDE.md" "commands"
+      ;;
+    *)
+      echo "Unsupported platform: $platform" >&2
+      exit 1
+      ;;
+  esac
+}
+
+verify_installation() {
+  local platform="$1"
+  local destination="$2"
+  local missing=()
+
+  while IFS= read -r entry; do
+    [ -z "$entry" ] && continue
+    if [ ! -e "$destination/$entry" ]; then
+      missing+=("$entry")
+    fi
+  done < <(expected_entries "$platform")
+
+  if [ "${#missing[@]}" -gt 0 ]; then
+    echo "Install verification failed. Missing entries: ${missing[*]}" >&2
+    exit 1
+  fi
 }
 
 if [ -z "$TARGET_DIR" ]; then
@@ -63,14 +101,14 @@ if [ -z "$TARGET_DIR" ]; then
       TARGET_DIR="$HOME/.claude/skills/$SKILL_NAME"
       ;;
     *)
-      echo "不支持的平台：$PLATFORM" >&2
+      echo "Unsupported platform: $PLATFORM" >&2
       exit 1
       ;;
   esac
 fi
 
-echo "正在为 $PLATFORM 安装 $SKILL_NAME ..."
-echo "目标目录：$TARGET_DIR"
+echo "Installing $SKILL_NAME for $PLATFORM ..."
+echo "Target: $TARGET_DIR"
 
 rm -rf "$TARGET_DIR"
 mkdir -p "$TARGET_DIR"
@@ -96,5 +134,8 @@ case "$PLATFORM" in
     ;;
 esac
 
-echo "安装完成。"
-echo "安装路径：$TARGET_DIR"
+verify_installation "$PLATFORM" "$TARGET_DIR"
+
+echo "Verification passed."
+echo "Install complete."
+echo "Bundle path: $TARGET_DIR"
