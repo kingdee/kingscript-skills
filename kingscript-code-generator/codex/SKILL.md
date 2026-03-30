@@ -7,40 +7,181 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 
 作为 Codex 处理 Kingscript 二开任务的入口 skill 使用。
 
+## 本地资源发现
+
+这个 skill 不应该把某一台机器的路径写死。每次进入 Kingscript 任务时，先按下面顺序解析本地资源根目录：
+
+1. 优先读取 skill 同目录下的 `local-paths.json`
+2. 如果没有，再读取当前工作区的 `AGENTS.md`，查找用户声明的本地资源路径
+3. 如果还没有，再尝试默认目录发现
+
+只有在上一步路径真实存在时，才允许继续使用；不存在就继续降级，不要直接假设目录一定在。
+
+### `local-paths.json` 约定
+
+文件位置：
+
+- skill 安装目录下的 `local-paths.json`
+
+建议字段：
+
+- `workspace_root`
+- `repo_root`
+- `references_root`
+- `examples_root`
+- `sdk_root`
+- `templates_root`
+- `language_root`
+- `java_sample_jar`
+- `bos_docs_path`
+
+如果用户安装了这份 skill，只需要把这些字段改成他自己机器上的路径即可，不需要再改 `SKILL.md` 主体。
+
+### `AGENTS.md` 约定
+
+如果没有 `local-paths.json`，再尝试在工作区 `AGENTS.md` 里找类似下面的配置块：
+
+```md
+## Kingscript Local Resources
+
+- `workspace_root`: `D:\kingscript skills`
+- `repo_root`: `D:\kingscript skills\kingscript-code-generator`
+- `references_root`: `D:\kingscript skills\kingscript-code-generator\references`
+- `java_sample_jar`: `D:\kingscript skills\bos-plugin-sample-7.0.jar`
+```
+
+### 默认目录发现
+
+只有在 `local-paths.json` 和 `AGENTS.md` 都没有提供可用路径时，才按下面顺序尝试：
+
+1. 当前工作区下是否存在 `references/examples`、`references/sdk`、`references/templates`
+2. 当前工作区的 `kingscript-code-generator/references`
+3. 当前工作区的上级或同级目录里是否存在名为 `kingscript-code-generator` 的仓库副本
+
+如果这些默认目录都不存在，就必须明确说明“本地资料根目录未配置”，而不是编造路径。
+
+## 解析后的固定入口
+
+### examples
+
+- `<references_root>\examples\README.md`
+- `<references_root>\examples\plugins\README.md`
+- `<references_root>\examples\plugins\插件示例\`
+
+### templates
+
+- `<templates_root>\README.md`
+
+### sdk
+
+- `<sdk_root>\README.md`
+- `<sdk_root>\strategy.md`
+- `<sdk_root>\indexes\class-index.md`
+- `<sdk_root>\indexes\method-index.md`
+- `<sdk_root>\indexes\methods-by-name.md`
+- `<sdk_root>\indexes\scenario-index.md`
+- `<sdk_root>\indexes\keyword-index.md`
+
+### language
+
+- `<language_root>\README.md`
+
 ## 优先阅读
 
-1. 先找 `../references/examples/` 中最接近的示例
-2. 如果需要插件骨架或占位代码，读 `../references/templates/README.md`
-3. 如果涉及 SDK，先读 `../references/sdk/README.md`、`../references/sdk/strategy.md` 和 `../references/sdk/indexes/`
-4. 如果涉及语法、关键字或语言限制，读 `../references/language/kingscript/README.md`
+1. 先解析 `references_root / examples_root / sdk_root / templates_root / language_root`
+2. 再找 `<examples_root>` 中最接近的示例
+3. 如果需要插件骨架或占位代码，读 `<templates_root>\README.md`
+4. 如果涉及 SDK，先读 `<sdk_root>\README.md`、`strategy.md` 和 `indexes\`
+5. 如果涉及语法、关键字或语言限制，读 `<language_root>\README.md`
+
+## 降级查找顺序
+
+当 skill 里只给了目录、没有给具体文件时，必须按下面顺序继续收敛，直到落到具体文件，而不是停在目录名上：
+
+1. 先开该目录下的 `README.md`
+2. 再看该目录下的文件名是否已经能直接定位目标
+3. 如果只知道类名、方法名、事件名、插件类型，优先回到 `sdk/indexes/`
+4. 如果只知道“场景”，优先回到 `examples/plugins/README.md` 和对应“场景拆分”目录的 `README.md`
+5. 如果仍然不够，再在目标目录里做关键字检索
+6. 索引和 examples 都不够时，再降级到 `sdk/manifests/`
+7. 仍不足时，再看本地 `.d.ts`、`jar` 反编译结果或在线 Javadoc
+
+## 目录级路径的收敛规则
+
+### 从 examples 收敛
+
+- 已知是插件案例时，先开 `<examples_root>\plugins\README.md`
+- 再根据插件类别进入 `插件示例/表单插件-场景拆分/README.md`、`插件示例/字段控件-场景拆分/README.md`、`插件示例/控件-场景拆分/README.md`、`插件示例/单据体-场景拆分/README.md`、`插件示例/报表查询插件-场景拆分/README.md` 这类目录 README
+- 只有目录名时，必须继续打开该目录里的具体 `*.md`，不能只回答“去这个目录找”
+
+### 从 sdk 收敛
+
+- 已知类名：`<sdk_root>\indexes\class-index.md`
+- 已知方法名：`<sdk_root>\indexes\method-index.md`，如果没有，再看 `methods-by-name.md`
+- 已知生命周期或插件类型：`<sdk_root>\indexes\plugin-index.md`、`methods-lifecycle.md`
+- 已知业务词或场景词：`<sdk_root>\indexes\scenario-index.md`、`keyword-index.md`
+- 找到线索后，继续打开 `<sdk_root>\classes\`、`packages\`、`plugins\`、`microservices\` 下的具体文件
+
+### 从 language 收敛
+
+- 语法总入口先看 `<language_root>\README.md`
+- 再按主题进入 `类.md`、`方法.md`、`变量.md`、`接口.md`、`异常处理.md`、`语法示例.md`
+
+## 本地检索方式
+
+如果目录 README 仍然不够，必须继续做本地检索。优先级如下：
+
+1. 优先 `rg --files` 或 `rg -n`
+2. 如果 `rg` 不可用或权限异常，改用 PowerShell：
+
+```powershell
+Get-ChildItem -Path '<references_root>' -Recurse -Include *.md |
+  Select-String -Pattern 'SearchEnterEvent|EntryGridBindDataEvent|AbstractReportFormPlugin' -Encoding UTF8
+```
+
+3. 如果要先看目录里有什么文件，用：
+
+```powershell
+Get-ChildItem -Path '<examples_root>\plugins\插件示例\控件-场景拆分'
+```
+
+4. 如果要从 `jar` 里找 Java 来源，用：
+
+```powershell
+jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportColumnMergePlugin'
+```
 
 ## 任务路由
 
 ### 生成或修改代码
 
-- 先读 `../references/templates/`
-- 再读 `../references/examples/` 中最相关的示例
+- 先读 `<templates_root>\`
+- 再读 `<examples_root>\` 中最相关的示例
 - 生成代码时优先复用已有插件模板和事件写法
+- 页面提示、通知、消息框相关方法，必须回到 `IFormView` 或本地声明层确认，不把示例里出现过的方法名直接当成可用 API
+- 调用 `obj.method()` 前，必须确认 `method` 属于 `obj` 当前类型或其声明继承链；不能只因为别的事件参数或上下文对象上有同名方法就直接套用
+- 生成代码时不得把事件参数写成 `any`；如果当前版本声明只给出 `BizDataEventArgs` 或 `$.java.util.EventObject`，也必须按声明原样写
 
 ### 解释 SDK 或 Java 映射
 
-- 先读 `../references/sdk/README.md`
-- 再读 `../references/sdk/strategy.md`
-- 已知类名时优先读 `../references/sdk/indexes/class-index.md`
-- 已知方法名时优先读 `../references/sdk/indexes/method-index.md`
-- 只知道场景时优先读 `../references/sdk/indexes/scenario-index.md`
-- 只知道关键词时优先读 `../references/sdk/indexes/keyword-index.md`
-- 找到入口后，再读 `../references/sdk/classes/`、`../references/sdk/packages/`、`../references/sdk/plugins/`、`../references/sdk/microservices/`
-- 索引不足时，再降级到 `../references/sdk/manifests/`
+- 先读 `<sdk_root>\README.md`
+- 再读 `<sdk_root>\strategy.md`
+- 已知类名时优先读 `<sdk_root>\indexes\class-index.md`
+- 已知方法名时优先读 `<sdk_root>\indexes\method-index.md`；未命中时补读 `methods-by-name.md`
+- 只知道场景时优先读 `<sdk_root>\indexes\scenario-index.md`
+- 只知道关键词时优先读 `<sdk_root>\indexes\keyword-index.md`
+- 找到入口后，再读 `<sdk_root>\classes\`、`packages\`、`plugins\`、`microservices\` 下的具体文件
+- 索引不足时，再降级到 `<sdk_root>\manifests\`
 - 如果维护者本地额外挂载了外部知识盘，再按 `strategy.md` 进入外部扩展层
+- 如果 `local-paths.json` 中配置了 `bos_docs_path`，把它视为外部知识盘主入口；只有仓库内资料不足时才进入
 - 命中外部 `*-description.md` 时，先读描述卡；只有需要真实写法、坑点或运行时边界时，再继续读配套 `*-example.md`
 - 仍不足时，再读取本地最相关的 `.d.ts` 或在线 Javadoc
 
 ### 诊断问题或做风险审查
 
-- 先找同类场景的 `../references/examples/`
-- 再核对 `../references/sdk/` 中的类、方法和生命周期说明
-- 最后核对 `../references/language/kingscript/README.md` 及相关语法条目
+- 先找同类场景的 `<examples_root>\`
+- 再核对 `<sdk_root>\` 中的类、方法和生命周期说明
+- 最后核对 `<language_root>\README.md` 及相关语法条目
 
 ## 输出约定
 

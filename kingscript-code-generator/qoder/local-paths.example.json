@@ -1,0 +1,11 @@
+{
+  "workspace_root": "D:\\kingscript skills",
+  "repo_root": "D:\\kingscript skills\\kingscript-code-generator",
+  "references_root": "D:\\kingscript skills\\kingscript-code-generator\\references",
+  "examples_root": "D:\\kingscript skills\\kingscript-code-generator\\references\\examples",
+  "sdk_root": "D:\\kingscript skills\\kingscript-code-generator\\references\\sdk",
+  "templates_root": "D:\\kingscript skills\\kingscript-code-generator\\references\\templates",
+  "language_root": "D:\\kingscript skills\\kingscript-code-generator\\references\\language\\kingscript",
+  "java_sample_jar": "D:\\kingscript skills\\bos-plugin-sample-7.0.jar",
+  "bos_docs_path": "D:\\bos-docs"
+}

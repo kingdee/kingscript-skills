@@ -7,6 +7,7 @@
 - [beforePropertyChanged.md](beforePropertyChanged.md)
 - [propertyChanged.md](propertyChanged.md)
 - [createNewData.md](createNewData.md)
+- [afterCreateNewData.md](afterCreateNewData.md)
 - [preOpenForm.md](preOpenForm.md)
 - [beforeBindData.md](beforeBindData.md)
 - [afterBindData.md](afterBindData.md)

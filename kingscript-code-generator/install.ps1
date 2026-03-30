@@ -57,6 +57,21 @@ function Copy-FileToRoot {
     Copy-Item -Path $Source -Destination (Join-Path $DestinationDir $DestinationName) -Force
 }
 
+function Backup-OptionalFile {
+    param(
+        [string]$Source,
+        [string]$Backup
+    )
+
+    if (Test-Path $Source) {
+        $parent = Split-Path -Parent $Backup
+        if ($parent) {
+            New-Item -ItemType Directory -Path $parent -Force | Out-Null
+        }
+        Copy-Item -Path $Source -Destination $Backup -Force
+    }
+}
+
 function Copy-TextFileWithReplacements {
     param(
         [string]$Source,
@@ -88,10 +103,13 @@ function Get-ExpectedEntries {
 
     switch ($SelectedPlatform) {
         "codex" {
-            $entries += @("AGENTS.md", "agents")
+            $entries += @("AGENTS.md", "README.md", "local-paths.example.json", "agents")
+        }
+        "qoder" {
+            $entries += @("README.md", "local-paths.example.json")
         }
         "claude" {
-            $entries += @("CLAUDE.md", "commands")
+            $entries += @("CLAUDE.md", "README.md", "local-paths.example.json", "commands")
         }
     }
 
@@ -124,7 +142,13 @@ if (-not $TargetDir) {
 Write-Host "Installing $SkillName for $Platform ..." -ForegroundColor Cyan
 Write-Host "Target: $TargetDir" -ForegroundColor Cyan
 
+$tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("$SkillName-" + [System.Guid]::NewGuid().ToString("N"))
+$backupLocalPaths = Join-Path $tempRoot "local-paths.json"
+
 if (Test-Path $TargetDir) {
+    if ($Platform -in @("codex", "qoder", "claude")) {
+        Backup-OptionalFile -Source (Join-Path $TargetDir "local-paths.json") -Backup $backupLocalPaths
+    }
     Write-Host "Existing bundle found, replacing it..." -ForegroundColor Yellow
     Remove-Item -Path $TargetDir -Recurse -Force
 }
@@ -139,11 +163,21 @@ switch ($Platform) {
         }
         Copy-TextFileWithReplacements -Source (Join-Path $ScriptRoot "codex\SKILL.md") -Destination (Join-Path $TargetDir "SKILL.md") -Replacements $rootReplacements
         Copy-TextFileWithReplacements -Source (Join-Path $ScriptRoot "codex\AGENTS.md") -Destination (Join-Path $TargetDir "AGENTS.md") -Replacements $rootReplacements
+        Copy-FileToRoot -Source (Join-Path $ScriptRoot "codex\README.md") -DestinationDir $TargetDir -DestinationName "README.md"
+        Copy-FileToRoot -Source (Join-Path $ScriptRoot "codex\local-paths.example.json") -DestinationDir $TargetDir -DestinationName "local-paths.example.json"
         Copy-DirectoryContent -Source (Join-Path $ScriptRoot "codex\agents") -Destination (Join-Path $TargetDir "agents")
+        if (Test-Path $backupLocalPaths) {
+            Copy-Item -Path $backupLocalPaths -Destination (Join-Path $TargetDir "local-paths.json") -Force
+        }
     }
     "qoder" {
         Copy-TextFileWithReplacements -Source (Join-Path $ScriptRoot "qoder\SKILL.md") -Destination (Join-Path $TargetDir "SKILL.md") -Replacements @{
             "../references/" = "./references/"
+        }
+        Copy-FileToRoot -Source (Join-Path $ScriptRoot "qoder\README.md") -DestinationDir $TargetDir -DestinationName "README.md"
+        Copy-FileToRoot -Source (Join-Path $ScriptRoot "qoder\local-paths.example.json") -DestinationDir $TargetDir -DestinationName "local-paths.example.json"
+        if (Test-Path $backupLocalPaths) {
+            Copy-Item -Path $backupLocalPaths -Destination (Join-Path $TargetDir "local-paths.json") -Force
         }
     }
     "claude" {
@@ -151,6 +185,8 @@ switch ($Platform) {
         Copy-TextFileWithReplacements -Source (Join-Path $ScriptRoot "claude-code\CLAUDE.md") -Destination (Join-Path $TargetDir "CLAUDE.md") -Replacements @{
             "../references/" = "./references/"
         }
+        Copy-FileToRoot -Source (Join-Path $ScriptRoot "claude-code\README.md") -DestinationDir $TargetDir -DestinationName "README.md"
+        Copy-FileToRoot -Source (Join-Path $ScriptRoot "claude-code\local-paths.example.json") -DestinationDir $TargetDir -DestinationName "local-paths.example.json"
 
         $commandsDir = Join-Path $TargetDir "commands"
         New-Item -ItemType Directory -Path $commandsDir -Force | Out-Null
@@ -159,11 +195,17 @@ switch ($Platform) {
                 "../../references/" = "../references/"
             }
         }
+        if (Test-Path $backupLocalPaths) {
+            Copy-Item -Path $backupLocalPaths -Destination (Join-Path $TargetDir "local-paths.json") -Force
+        }
     }
 }
 
 Write-Host ""
 Test-InstalledBundle -SelectedPlatform $Platform -Destination $TargetDir
+if (Test-Path $tempRoot) {
+    Remove-Item -Path $tempRoot -Recurse -Force
+}
 Write-Host "Verification passed." -ForegroundColor Green
 Write-Host "Install complete." -ForegroundColor Green
 Write-Host "Bundle path: $TargetDir" -ForegroundColor Cyan

@@ -6,7 +6,7 @@
 |------|------|
 | 所属接口 | `AbstractFormPlugin` |
 | 触发时机 | 页面定时器触发后回调 |
-| 方法签名 | `timerElapsed(e: any): void` |
+| 方法签名 | `timerElapsed(e: TimerElapsedArgs): void` |
 
 ## 说明
 
@@ -20,16 +20,17 @@
 
 ```typescript
 import { AbstractFormPlugIn } from "@cosmic/bos-core/kd/bos/form/plugin";
+import { TimerElapsedArgs } from "@cosmic/bos-core/kd/bos/form/events";
 import { QueryServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
 
 class SalesBoardTimerPlugin extends AbstractFormPlugIn {
 
-  afterBindData(e: any): void {
+  afterBindData(e: $.java.util.EventObject): void {
     super.afterBindData(e);
     this.getView().startTimer(30000);
   }
 
-  timerElapsed(e: any): void {
+  timerElapsed(e: TimerElapsedArgs): void {
     super.timerElapsed(e);
 
     const summary = QueryServiceHelper.queryOne(
@@ -46,7 +47,7 @@ class SalesBoardTimerPlugin extends AbstractFormPlugIn {
     }
   }
 
-  pageRelease(e: any): void {
+  pageRelease(e: $.java.util.EventObject): void {
     super.pageRelease(e);
     this.getView().stopTimer();
   }

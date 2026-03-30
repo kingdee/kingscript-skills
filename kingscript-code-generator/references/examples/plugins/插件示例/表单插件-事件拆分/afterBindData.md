@@ -8,7 +8,7 @@
 |------|------|
 | 所属接口 | AbstractFormPlugin |
 | 触发时机 | 数据完全绑定到界面控件之后触发，此时界面已完成渲染，可安全操作控件状态 |
-| 方法签名 | `afterBindData(e: any): void` |
+| 方法签名 | `afterBindData(e: AfterBindDataEvent): void` |
 
 ## 说明
 
@@ -28,6 +28,7 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { AfterBindDataEvent } from "@cosmic/bos-core/kd/bos/form/events";
 import { IBillView, BillOperationStatus } from "@cosmic/bos-core/kd/bos/bill";
 
 /**
@@ -35,7 +36,7 @@ import { IBillView, BillOperationStatus } from "@cosmic/bos-core/kd/bos/bill";
  */
 class PmPurorderStatusControlPlugin extends AbstractBillPlugIn {
 
-  afterBindData(e: any): void {
+  afterBindData(e: AfterBindDataEvent): void {
     super.afterBindData(e);
 
     const billStatus = this.getModel().getValue("billstatus") as string;

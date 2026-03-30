@@ -34,20 +34,21 @@ import { FormShowParameter } from "@cosmic/bos-core/kd/bos/form";
 import { ShowType } from "@cosmic/bos-core/kd/bos/form";
 import { CloseCallBack } from "@cosmic/bos-core/kd/bos/form";
 import { ClosedCallBackEvent } from "@cosmic/bos-core/kd/bos/form/events";
+import { ItemClickEvent } from "@cosmic/bos-core/kd/bos/form/control/events";
 
 /**
  * 采购订单表单插件 - 供应商选择后自动填充联系信息
  */
 class PmPurorderSupplierFillPlugin extends AbstractBillPlugIn {
 
-  registerListener(e: any): void {
+  registerListener(e: $.java.util.EventObject): void {
     super.registerListener(e);
 
     // 注册自定义按钮点击监听
     this.addItemClickService("btn_select_supplier");
   }
 
-  itemClick(e: any): void {
+  itemClick(e: ItemClickEvent): void {
     super.itemClick(e);
 
     const itemKey = e.getItemKey();

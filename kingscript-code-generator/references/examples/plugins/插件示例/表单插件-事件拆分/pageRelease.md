@@ -6,7 +6,7 @@
 |------|------|
 | 所属接口 | `AbstractFormPlugin` |
 | 触发时机 | 页面销毁、资源释放前触发 |
-| 方法签名 | `pageRelease(e: any): void` |
+| 方法签名 | `pageRelease(e: $.java.util.EventObject): void` |
 
 ## 说明
 
@@ -23,12 +23,12 @@ import { AbstractFormPlugIn } from "@cosmic/bos-core/kd/bos/form/plugin";
 
 class ResourceCleanupPlugin extends AbstractFormPlugIn {
 
-  afterBindData(e: any): void {
+  afterBindData(e: $.java.util.EventObject): void {
     super.afterBindData(e);
     this.getView().startTimer(15000);
   }
 
-  pageRelease(e: any): void {
+  pageRelease(e: $.java.util.EventObject): void {
     super.pageRelease(e);
     this.getView().stopTimer();
   }

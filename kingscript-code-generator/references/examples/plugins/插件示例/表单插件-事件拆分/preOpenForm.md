@@ -8,7 +8,7 @@
 |------|------|
 | 所属接口 | AbstractFormPlugin |
 | 触发时机 | 表单打开前最早期触发，此时界面尚未加载 |
-| 方法签名 | `preOpenForm(e: any): void` |
+| 方法签名 | `preOpenForm(e: PreOpenFormEventArgs): void` |
 
 ## 说明
 
@@ -18,7 +18,7 @@
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| e | any | 表单打开前事件参数 |
+| e | PreOpenFormEventArgs | 表单打开前事件参数 |
 | e.setCancel(boolean) | void | 设置为 true 可取消打开表单 |
 | e.setCancelMessage(string) | void | 设置取消打开时的提示信息 |
 
@@ -30,6 +30,7 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { PreOpenFormEventArgs } from "@cosmic/bos-core/kd/bos/form/events";
 import { QueryServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
 import { RequestContext } from "@cosmic/bos-core/kd/bos/context";
@@ -39,7 +40,7 @@ import { RequestContext } from "@cosmic/bos-core/kd/bos/context";
  */
 class ApPaybillAccessPlugin extends AbstractBillPlugIn {
 
-  preOpenForm(e: any): void {
+  preOpenForm(e: PreOpenFormEventArgs): void {
     super.preOpenForm(e);
 
     const currentUserId = RequestContext.get().getCurrUserId();
@@ -93,14 +94,14 @@ class ApPaybillAccessPlugin extends AbstractBillPlugIn {
     }
   }
 
-  afterBindData(e: any): void {
+  afterBindData(e: $.java.util.EventObject): void {
     super.afterBindData(e);
 
     const formShowParameter = this.getView().getFormShowParameter();
     const customParams = formShowParameter.getCustomParams();
 
     if (customParams != null && customParams.get("isLargePayment") === "true") {
-      this.getView().showWarnNotification(
+      this.getView().showTipNotification(
         "注意：当前为大额付款单，请仔细核对付款信息"
       );
     }

@@ -26,6 +26,7 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { ItemClickEvent } from "@cosmic/bos-core/kd/bos/form/control/events";
 import { QueryServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
 import { RequestContext } from "@cosmic/bos-core/kd/bos/context";
@@ -78,7 +79,7 @@ class PmPurorderToolbarPlugin extends AbstractBillPlugIn {
     }
   }
 
-  registerListener(e: any): void {
+  registerListener(e: $.java.util.EventObject): void {
     super.registerListener(e);
 
     // 注册工具栏按钮点击监听
@@ -87,7 +88,7 @@ class PmPurorderToolbarPlugin extends AbstractBillPlugIn {
     this.addItemClickService("btn_supplier_evaluate");
   }
 
-  itemClick(e: any): void {
+  itemClick(e: ItemClickEvent): void {
     super.itemClick(e);
 
     const itemKey = e.getItemKey();
@@ -96,7 +97,7 @@ class PmPurorderToolbarPlugin extends AbstractBillPlugIn {
       // 批量询价：收集分录中所有物料，打开询价界面
       const rowCount = this.getModel().getEntryRowCount("billentry");
       if (rowCount === 0) {
-        this.getView().showWarnNotification("请先添加物料分录");
+        this.getView().showTipNotification("请先添加物料分录");
         return;
       }
 
@@ -120,13 +121,13 @@ class PmPurorderToolbarPlugin extends AbstractBillPlugIn {
       // 价格对比：查询各供应商报价
       const rowIndex = this.getModel().getEntryCurrentRowIndex("billentry");
       if (rowIndex < 0) {
-        this.getView().showWarnNotification("请先选择一行物料");
+        this.getView().showTipNotification("请先选择一行物料");
         return;
       }
 
       const materialId = this.getModel().getValue("material", rowIndex);
       if (materialId == null) {
-        this.getView().showWarnNotification("当前行未选择物料");
+        this.getView().showTipNotification("当前行未选择物料");
         return;
       }
 
@@ -161,7 +162,7 @@ class PmPurorderToolbarPlugin extends AbstractBillPlugIn {
       // 供应商评估：打开供应商评估表单
       const supplierId = this.getModel().getValue("supplier");
       if (supplierId == null) {
-        this.getView().showWarnNotification("请先选择供应商");
+        this.getView().showTipNotification("请先选择供应商");
         return;
       }
 

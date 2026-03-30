@@ -79,17 +79,27 @@ bash install.sh claude /custom/path/kingscript-code-generator
 kingscript-code-generator/
 ├─ SKILL.md
 ├─ AGENTS.md
+├─ README.md
+├─ local-paths.example.json
 ├─ agents/
 └─ references/
 ```
+
+Codex 安装后，建议先复制 `local-paths.example.json` 为 `local-paths.json`，再把本机资源路径填进去。安装脚本在覆盖安装时会保留已有的 `local-paths.json`。
+如果本地还挂了最全的外部知识盘，也建议一并配置 `bos_docs_path`。
 
 ### Qoder
 
 ```text
 kingscript-code-generator/
 ├─ SKILL.md
+├─ README.md
+├─ local-paths.example.json
 └─ references/
 ```
+
+Qoder 安装后，建议先复制 `local-paths.example.json` 为 `local-paths.json`，再把本机资源路径填进去。安装脚本在覆盖安装时会保留已有的 `local-paths.json`。
+如果本地还挂了最全的外部知识盘，也建议一并配置 `bos_docs_path`。
 
 ### Claude Code
 
@@ -97,9 +107,14 @@ kingscript-code-generator/
 kingscript-code-generator/
 ├─ SKILL.md
 ├─ CLAUDE.md
+├─ README.md
+├─ local-paths.example.json
 ├─ commands/
 └─ references/
 ```
+
+Claude Code 安装后，建议先复制 `local-paths.example.json` 为 `local-paths.json`，再把本机资源路径填进去。安装脚本在覆盖安装时会保留已有的 `local-paths.json`。
+如果本地还挂了最全的外部知识盘，也建议一并配置 `bos_docs_path`。
 
 ## 共享内容说明
 
@@ -137,6 +152,7 @@ kingscript-code-generator/
 
 - 通过环境变量 `BOS_DOCS_PATH` 指向外部资料目录
 - 或在当前工作区放置一个不提交到仓库的本地文档目录
+- 或在安装目录的 `local-paths.json` 中显式配置 `bos_docs_path`
 
 推荐的外部知识盘组织方式：
 

@@ -8,7 +8,7 @@
 |------|------|
 | 所属接口 | IDataModelChangeListener |
 | 触发时机 | 字段值被修改之前触发，可在此拦截并取消修改操作 |
-| 方法签名 | `beforePropertyChanged(e: any): void` |
+| 方法签名 | `beforePropertyChanged(e: PropertyChangedArgs): void` |
 
 ## 说明
 
@@ -18,7 +18,7 @@
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| e | BeforePropertyChangedArgs | 事件参数对象 |
+| e | PropertyChangedArgs | 事件参数对象 |
 | e.getPropertyName() | string | 获取被修改的字段标识 |
 | e.getNewValue() | any | 获取即将设置的新值 |
 | e.getOldValue() | any | 获取修改前的旧值 |
@@ -33,13 +33,14 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { PropertyChangedArgs } from "@cosmic/bos-core/kd/bos/entity/datamodel/events";
 
 /**
  * 采购订单表单插件 - 已审核单据不允许修改单价
  */
 class PmPurorderPriceCheckPlugin extends AbstractBillPlugIn {
 
-  beforePropertyChanged(e: any): void {
+  beforePropertyChanged(e: PropertyChangedArgs): void {
     super.beforePropertyChanged(e);
 
     const fieldKey = e.getPropertyName();
@@ -53,7 +54,7 @@ class PmPurorderPriceCheckPlugin extends AbstractBillPlugIn {
       if (billStatus === "C") {
         // 阻止修改
         e.setCancel(true);
-        this.getView().showWarnNotification("已审核的采购订单不允许修改单价");
+        this.getView().showTipNotification("已审核的采购订单不允许修改单价");
         return;
       }
 
@@ -61,7 +62,7 @@ class PmPurorderPriceCheckPlugin extends AbstractBillPlugIn {
       const newPrice = e.getNewValue() as BigDecimal;
       if (newPrice != null && newPrice.compareTo(BigDecimal.ZERO) < 0) {
         e.setCancel(true);
-        this.getView().showWarnNotification("单价不能为负数");
+        this.getView().showTipNotification("单价不能为负数");
         return;
       }
     }

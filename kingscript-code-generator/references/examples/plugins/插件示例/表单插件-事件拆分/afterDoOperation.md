@@ -87,11 +87,11 @@ class PmPurorderAutoPushPlugin extends AbstractBillPlugIn {
           if (saveResult.isSuccess()) {
             this.getView().showSuccessNotification("已自动生成采购入库单");
           } else {
-            this.getView().showWarnNotification("采购入库单保存失败，请手动创建");
+            this.getView().showTipNotification("采购入库单保存失败，请手动创建");
           }
         }
       } else {
-        this.getView().showWarnNotification("下推生成采购入库单失败，请手动操作");
+        this.getView().showTipNotification("下推生成采购入库单失败，请手动操作");
       }
     } catch (error: any) {
       this.getView().showErrorNotification("自动下推异常：" + error.message);

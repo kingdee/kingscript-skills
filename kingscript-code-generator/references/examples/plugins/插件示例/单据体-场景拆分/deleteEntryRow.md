@@ -26,7 +26,7 @@ class DeleteEntryPlugin extends AbstractBillPlugIn {
     const rowIndex = rows.size() - 1;
     const qty = rows.get(rowIndex).get("qty");
     if (qty != null && qty > 0) {
-      this.getView().showWarnNotification("已有数量的分录不允许直接删除");
+      this.getView().showTipNotification("已有数量的分录不允许直接删除");
       return;
     }
 

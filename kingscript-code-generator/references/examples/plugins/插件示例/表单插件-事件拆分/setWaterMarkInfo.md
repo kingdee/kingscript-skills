@@ -6,7 +6,7 @@
 |------|------|
 | 所属接口 | `AbstractFormPlugin` |
 | 触发时机 | 页面准备设置水印信息时触发 |
-| 方法签名 | `setWaterMarkInfo(e: any): void` |
+| 方法签名 | `setWaterMarkInfo(e: $.kd.bos.form.events.LoadWaterMarkInfoEventArgs): void` |
 
 ## 说明
 
@@ -23,7 +23,7 @@ import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
 
 class ContractWatermarkPlugin extends AbstractBillPlugIn {
 
-  setWaterMarkInfo(e: any): void {
+  setWaterMarkInfo(e: $.kd.bos.form.events.LoadWaterMarkInfoEventArgs): void {
     super.setWaterMarkInfo(e);
 
     const billNo = this.getModel().getValue("billno") as string;

@@ -8,7 +8,7 @@
 |------|------|
 | 所属接口 | AbstractFormPlugin |
 | 触发时机 | 数据加载完成但尚未绑定到界面控件之前触发，可在绑定前对数据进行最后的调整 |
-| 方法签名 | `beforeBindData(e: any): void` |
+| 方法签名 | `beforeBindData(e: BeforeBindDataEvent): void` |
 
 ## 说明
 
@@ -28,6 +28,7 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { BeforeBindDataEvent } from "@cosmic/bos-core/kd/bos/form/events";
 import { QueryServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
 
@@ -36,7 +37,7 @@ import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
  */
 class PmPurorderExchangeRatePlugin extends AbstractBillPlugIn {
 
-  beforeBindData(e: any): void {
+  beforeBindData(e: BeforeBindDataEvent): void {
     super.beforeBindData(e);
 
     const currencyId = this.getModel().getValue("currency");

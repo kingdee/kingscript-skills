@@ -19,8 +19,8 @@
 | 参数 | 类型 | 说明 |
 |------|------|------|
 | e | BeforeDoOperationEventArgs | 事件参数对象 |
-| e.getOperationKey() | string | 获取当前操作标识（如 save、submit、audit） |
-| e.getSource() | FormOperate | 获取操作源对象，可进一步获取操作选项 |
+| e.getSource() | `Object` | 获取事件源；如需读取操作 key，需继续确认源对象类型 |
+| `operate.getOperateKey()` | string | 在源对象可确认为 `FormOperate` 时读取当前操作标识 |
 | e.setCancel(boolean) | void | 设置为 true 可取消本次操作 |
 | e.setCancelMessage(string) | void | 设置取消操作时的提示消息 |
 
@@ -33,6 +33,7 @@
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
 import { BeforeDoOperationEventArgs } from "@cosmic/bos-core/kd/bos/form/events";
+import { FormOperate } from "@cosmic/bos-core/kd/bos/form/operate";
 
 /**
  * 采购订单表单插件 - 提交前校验分录合计金额与单据头金额一致
@@ -42,13 +43,14 @@ class PmPurorderAmountCheckPlugin extends AbstractBillPlugIn {
   beforeDoOperation(e: BeforeDoOperationEventArgs): void {
     super.beforeDoOperation(e);
 
-    const opKey = e.getOperationKey();
+    const operate = e.getSource() as FormOperate;
+    const opKey = operate.getOperateKey();
 
     if (opKey === "submit") {
       const rowCount = this.getModel().getEntryRowCount("billentry");
       if (rowCount === 0) {
         e.setCancel(true);
-        this.getView().showWarnNotification("请至少添加一行分录后再提交");
+        this.getView().showTipNotification("请至少添加一行分录后再提交");
         return;
       }
 
@@ -64,7 +66,7 @@ class PmPurorderAmountCheckPlugin extends AbstractBillPlugIn {
 
       if (headTotalAmount == null) {
         e.setCancel(true);
-        this.getView().showWarnNotification("单据头合计金额不能为空");
+        this.getView().showTipNotification("单据头合计金额不能为空");
         return;
       }
 
@@ -73,7 +75,7 @@ class PmPurorderAmountCheckPlugin extends AbstractBillPlugIn {
 
       if (diff.compareTo(tolerance) > 0) {
         e.setCancel(true);
-        this.getView().showWarnNotification(
+        this.getView().showTipNotification(
           "分录合计金额（" + entryTotalAmount.toString() +
           "）与单据头金额（" + headTotalAmount.toString() +
           "）不一致，差额：" + diff.toString() + "，请检查后再提交"
@@ -88,13 +90,13 @@ class PmPurorderAmountCheckPlugin extends AbstractBillPlugIn {
 
         if (qty == null || qty.compareTo(BigDecimal.ZERO) <= 0) {
           e.setCancel(true);
-          this.getView().showWarnNotification("第" + rowNum + "行数量必须大于0");
+          this.getView().showTipNotification("第" + rowNum + "行数量必须大于0");
           return;
         }
 
         if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
           e.setCancel(true);
-          this.getView().showWarnNotification("第" + rowNum + "行单价不能为负数");
+          this.getView().showTipNotification("第" + rowNum + "行单价不能为负数");
           return;
         }
       }
@@ -109,7 +111,8 @@ export { plugin };
 ## 注意事项
 
 - 必须调用 `super.beforeDoOperation(e)` 以确保父类逻辑正常执行
-- 通过 `e.getOperationKey()` 判断当前操作类型，避免对所有操作都执行校验
+- 需要区分操作类型时，先确认操作 key 是挂在当前事件参数上，还是挂在 `e.getSource()` 返回的操作对象上
+- 当前示例按 `FormOperate.getOperateKey()` 写法收紧，避免把相近对象的方法混用
 - `e.setCancel(true)` 会阻止操作继续执行，用户界面不会有任何操作动作
 - 此方法属于界面级校验，适合做数据完整性检查；更严格的业务规则校验应放在操作插件中
 - 金额比较时建议使用 BigDecimal 的 `compareTo` 方法，不要直接用 `==` 比较

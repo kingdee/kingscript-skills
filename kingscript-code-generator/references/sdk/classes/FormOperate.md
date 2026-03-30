@@ -26,6 +26,7 @@
 
 - 它是“操作上下文”，不是最终执行结果。
 - 如果你要看执行成败，还是要回到 [OperationResult.md](OperationResult.md)。
+- 当前知识层统一以 `getOperateKey()` 作为已确认写法，不把 `getOperationKey()` 当作 `FormOperate` 的默认方法名。
 
 ## 常见搭配
 

@@ -8,7 +8,7 @@
 |------|------|
 | 所属接口 | IDataModelListener |
 | 触发时机 | 新建单据时数据包创建阶段触发，早于 afterCreateNewData |
-| 方法签名 | `createNewData(e: any): void` |
+| 方法签名 | `createNewData(e: BizDataEventArgs): void` |
 
 ## 说明
 
@@ -18,7 +18,7 @@
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| e | any | 事件参数对象 |
+| e | BizDataEventArgs | 事件参数对象 |
 | e.getDataEntity() | Object | 获取当前正在创建的数据包对象，通过 `set(key, value)` 赋值 |
 
 ## 业务场景
@@ -29,6 +29,7 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { BizDataEventArgs } from "@cosmic/bos-core/kd/bos/entity/datamodel/events";
 import { RequestContext } from "@cosmic/bos-core/kd/bos/context";
 import { QueryServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
@@ -38,7 +39,7 @@ import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
  */
 class ApPayApplyBillNoPlugin extends AbstractBillPlugIn {
 
-  createNewData(e: any): void {
+  createNewData(e: BizDataEventArgs): void {
     super.createNewData(e);
 
     const dataEntity = e.getDataEntity();
@@ -100,4 +101,5 @@ export { plugin };
 - 仅在新建单据时触发，编辑已有单据时不触发
 - 在此方法中界面模型尚未完全就绪，不建议调用 `this.getView()` 相关方法
 - 必须调用 `super.createNewData(e)` 以确保父类逻辑正常执行
+- 当前版本声明层已给出 `BizDataEventArgs`，不应再把事件参数写成 `any`
 - 插件类不能定义类属性，所有变量应在方法内部声明

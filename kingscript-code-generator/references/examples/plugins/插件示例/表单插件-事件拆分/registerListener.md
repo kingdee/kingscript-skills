@@ -6,7 +6,7 @@
 |------|------|
 | 所属接口 | AbstractFormPlugin |
 | 触发时机 | 表单初始化阶段，控件创建完成后触发，用于注册各类控件事件监听器 |
-| 方法签名 | `registerListener(e: any): void` |
+| 方法签名 | `registerListener(e: $.java.util.EventObject): void` |
 
 ## 说明
 
@@ -16,7 +16,7 @@
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| e | any | 事件参数对象（EventObject） |
+| e | $.java.util.EventObject | 事件参数对象（EventObject） |
 
 ## 业务场景
 
@@ -27,6 +27,8 @@
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
 import { BasedataEdit } from "@cosmic/bos-core/kd/bos/form/control";
+import { ItemClickEvent, RowClickEvent } from "@cosmic/bos-core/kd/bos/form/control/events";
+import { BeforeF7SelectEvent } from "@cosmic/bos-core/kd/bos/form/field/events";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
 
 /**
@@ -34,7 +36,7 @@ import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
  */
 class PmPurorderListenerPlugin extends AbstractBillPlugIn {
 
-  registerListener(e: any): void {
+  registerListener(e: $.java.util.EventObject): void {
     super.registerListener(e);
 
     // 1. 注册物料字段的F7过滤监听
@@ -57,7 +59,7 @@ class PmPurorderListenerPlugin extends AbstractBillPlugIn {
   }
 
   // F7过滤事件处理
-  beforeF7Select(e: any): void {
+  beforeF7Select(e: BeforeF7SelectEvent): void {
     super.beforeF7Select(e);
 
     const fieldKey = e.getProperty().getName();
@@ -81,7 +83,7 @@ class PmPurorderListenerPlugin extends AbstractBillPlugIn {
   }
 
   // 工具栏按钮点击事件处理
-  itemClick(e: any): void {
+  itemClick(e: ItemClickEvent): void {
     super.itemClick(e);
 
     const itemKey = e.getItemKey();
@@ -108,7 +110,7 @@ class PmPurorderListenerPlugin extends AbstractBillPlugIn {
   }
 
   // 分录行点击事件处理
-  entryRowClick(e: any): void {
+  entryRowClick(e: RowClickEvent): void {
     super.entryRowClick(e);
 
     const rowIndex = e.getRow();

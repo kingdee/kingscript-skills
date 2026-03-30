@@ -6,7 +6,7 @@
 |------|------|
 | 所属接口 | AbstractFormPlugin |
 | 触发时机 | 客户端字段值发生变动准备回传服务器之前触发，可在此拦截不必要的回传请求 |
-| 方法签名 | `beforeFieldPostBack(e: any): void` |
+| 方法签名 | `beforeFieldPostBack(e: BeforeFieldPostBackEvent): void` |
 
 ## 说明
 
@@ -16,7 +16,7 @@
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| e | any | 事件参数对象 |
+| e | BeforeFieldPostBackEvent | 事件参数对象 |
 | e.getFieldKey() | string | 获取发生变动的字段标识 |
 | e.setCancel(boolean) | void | 设置为 true 可取消本次回传，字段值变更不会发送到服务器 |
 
@@ -28,13 +28,14 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { BeforeFieldPostBackEvent } from "@cosmic/bos-core/kd/bos/form/events";
 
 /**
  * 采购订单表单插件 - 控制字段值变更回传策略以提升性能
  */
 class PmPurorderPostBackControlPlugin extends AbstractBillPlugIn {
 
-  beforeFieldPostBack(e: any): void {
+  beforeFieldPostBack(e: BeforeFieldPostBackEvent): void {
     super.beforeFieldPostBack(e);
 
     const fieldKey = e.getFieldKey();

@@ -5,11 +5,12 @@
 ## 默认工作流
 
 1. 分类任务：生成、修改、调试、解释、审查、设计
-2. 先找 `../references/examples/` 中最相关的示例
-3. 如果需要插件骨架，再读 `../references/templates/`
-4. 如果涉及 SDK，先读 `../references/sdk/README.md`、`../references/sdk/strategy.md` 和 `../references/sdk/indexes/`
-5. 如果涉及语法、关键字或限制，再读 `../references/language/kingscript/README.md`
-6. 用假设、结果、风险和待确认问题来回答
+2. 先解析本地资源路径：优先 `local-paths.json`，其次工作区 `CLAUDE.md` / `AGENTS.md` 中声明的资源路径，最后才做默认目录发现
+3. 再找 `references/examples/` 中最相关的示例
+4. 如果需要插件骨架，再读 `references/templates/`
+5. 如果涉及 SDK，先读 `references/sdk/README.md`、`references/sdk/strategy.md` 和 `references/sdk/indexes/`
+6. 如果涉及语法、关键字或限制，再读 `references/language/kingscript/README.md`
+7. 用假设、结果、风险和待确认问题来回答
 
 ## 安全边界
 

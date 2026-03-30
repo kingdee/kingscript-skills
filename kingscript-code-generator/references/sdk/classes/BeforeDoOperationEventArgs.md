@@ -36,7 +36,8 @@
 
 - 这是“操作前”参数，不适合读取最终执行结果。
 - `setCancel(true)` 之后，后续真正的操作执行链不会继续。
-- 如果按操作 key 分流，先确认当前场景里拿到的是不是同一个操作标识。
+- 如果按操作 key 分流，先确认当前版本里操作 key 是挂在当前事件参数上，还是要从 `e.getSource()` / `FormOperate` 一侧读取。
+- 不要把 `BeforeDoOperationEventArgs`、`AfterDoOperationEventArgs`、`FormOperate` 上的同名/近名方法混着用。
 
 ## 常见搭配
 

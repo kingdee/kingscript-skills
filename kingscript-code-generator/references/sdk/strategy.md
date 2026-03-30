@@ -152,6 +152,10 @@
 - 不允许直接跳过索引层去整目录扫 `node_modules`
 - 不允许把外部知识盘整目录扫读并替代仓库内索引层
 - 不允许只看 TypeScript 声明就默认运行时一定可用
+- 不允许因为示例里出现过某个方法，就默认它已经被 SDK 声明层确认
+- 不允许只确认“这个方法 somewhere 存在”，却不确认“它是否属于当前变量类型或其声明继承链”
+- 不允许把 A 事件参数、B 事件参数、`FormOperate`、`OperationContext` 等相邻对象的方法互相挪用
+- 不允许在生成代码时用 `any` 代替已知事件参数类型；如果声明层给出了 `BizDataEventArgs`、`BeforeDoOperationEventArgs`、`$.java.util.EventObject` 等类型，必须按当前版本声明使用
 - 不允许本地和在线来源冲突时擅自选一个而不说明
 
 ## 输出要求

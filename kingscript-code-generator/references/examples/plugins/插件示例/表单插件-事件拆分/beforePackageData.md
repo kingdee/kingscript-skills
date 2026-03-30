@@ -24,7 +24,7 @@ import { BeforePackageDataEvent } from "@cosmic/bos-core/kd/bos/entity/datamodel
 
 class PurOrderPrintPackagePlugin extends AbstractBillPlugIn {
 
-  registerListener(e: any): void {
+  registerListener(e: $.java.util.EventObject): void {
     super.registerListener(e);
     this.getModel().addDataModelListener(this);
   }
