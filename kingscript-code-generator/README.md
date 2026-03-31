@@ -16,6 +16,7 @@ kingscript-code-generator/
 ├─ codex/            # Codex 入口内容
 ├─ qoder/            # Qoder 入口内容
 ├─ claude-code/      # Claude Code 入口内容
+├─ sdks.zip          # 可选离线 SDK / 文档资料包
 ├─ install.sh        # Linux / macOS 安装脚本
 └─ install.ps1       # Windows 安装脚本
 ```
