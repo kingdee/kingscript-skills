@@ -167,6 +167,18 @@ Claude Code 安装后，建议先复制 `local-paths.example.json` 为 `local-pa
 - 优先把高频、高风险内容提炼成 `references/sdk/indexes/`、`references/sdk/classes/`、`references/sdk/packages/` 和 `references/examples/`。
 - 只有仓库内知识层不足时，才按 `references/sdk/strategy.md` 的规则降级到外部知识盘。
 
+### 仓库内附带的离线资料包
+
+如果你需要一份可直接下载的离线 SDK / 文档资料包，可以使用当前目录下的 `sdks.zip`。
+
+推荐用法：
+
+1. 下载并解压 `sdks.zip`
+2. 把解压后的目录配置到 `bos_docs_path` 或环境变量 `BOS_DOCS_PATH`
+3. 仍然先走仓库内 `references/`，只有不足时再进入这份离线资料包
+
+这份压缩包的定位是“最全的可选扩展层”，不是默认入口，也不替代仓库内已经结构化整理好的 `references/`。
+
 ## 许可
 
 MIT
