@@ -28,6 +28,7 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 - `workspace_root`
 - `repo_root`
 - `references_root`
+- `docs_root`
 - `examples_root`
 - `sdk_root`
 - `templates_root`
@@ -45,13 +46,14 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 
 ## 优先阅读
 
-1. 先解析 `references_root / examples_root / sdk_root / templates_root / language_root`
-2. 阅读 `<examples_root>` 中最相关的示例
-3. 如果需要插件骨架，阅读 `<templates_root>`
-4. 如果涉及 SDK，先阅读 `<sdk_root>\README.md`、`<sdk_root>\strategy.md` 和 `<sdk_root>\indexes\`
-5. 如果涉及语法或关键字，阅读 `<language_root>\README.md`
-6. 如果仓库内资料不足且本地挂载了外部知识盘，按 `<sdk_root>\strategy.md` 进入外部扩展层，先读 `*-description.md`，需要真实写法或坑点时再读配套 `*-example.md`
-7. 如果 `local-paths.json` 中配置了 `bos_docs_path`，把它视为外部知识盘主入口；只有仓库内资料不足时才进入
+1. 先解析 `references_root / docs_root / examples_root / sdk_root / templates_root / language_root`
+2. 如果用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API`，先阅读 `<references_root>\docs\custom-development\脚本控制器开发指南.md`
+3. 阅读 `<examples_root>` 中最相关的示例
+4. 如果需要插件骨架，阅读 `<templates_root>`
+5. 如果涉及 SDK，先阅读 `<sdk_root>\README.md`、`<sdk_root>\strategy.md` 和 `<sdk_root>\indexes\`
+6. 如果涉及语法或关键字，阅读 `<language_root>\README.md`
+7. 如果仓库内资料不足且本地挂载了外部知识盘，按 `<sdk_root>\strategy.md` 进入外部扩展层，先读 `*-description.md`，需要真实写法或坑点时再读配套 `*-example.md`
+8. 如果 `local-paths.json` 中配置了 `bos_docs_path`，把它视为外部知识盘主入口；只有仓库内资料不足时才进入
 
 ## 降级查找顺序
 

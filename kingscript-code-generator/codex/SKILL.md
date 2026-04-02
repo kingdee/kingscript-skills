@@ -28,6 +28,7 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 - `workspace_root`
 - `repo_root`
 - `references_root`
+- `docs_root`
 - `examples_root`
 - `sdk_root`
 - `templates_root`
@@ -68,6 +69,12 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 - `<references_root>\examples\plugins\README.md`
 - `<references_root>\examples\plugins\插件示例\`
 
+### docs
+
+- `<references_root>\docs\README.md`
+- `<references_root>\docs\custom-development\README.md`
+- `<references_root>\docs\custom-development\脚本控制器开发指南.md`
+
 ### templates
 
 - `<templates_root>\README.md`
@@ -88,11 +95,12 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 
 ## 优先阅读
 
-1. 先解析 `references_root / examples_root / sdk_root / templates_root / language_root`
+1. 先解析 `references_root / docs_root / examples_root / sdk_root / templates_root / language_root`
 2. 再找 `<examples_root>` 中最接近的示例
-3. 如果需要插件骨架或占位代码，读 `<templates_root>\README.md`
-4. 如果涉及 SDK，先读 `<sdk_root>\README.md`、`strategy.md` 和 `indexes\`
-5. 如果涉及语法、关键字或语言限制，读 `<language_root>\README.md`
+3. 如果用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API`，先读 `<references_root>\docs\custom-development\脚本控制器开发指南.md`
+4. 如果需要插件骨架或占位代码，读 `<templates_root>\README.md`
+5. 如果涉及 SDK，先读 `<sdk_root>\README.md`、`strategy.md` 和 `indexes\`
+6. 如果涉及语法、关键字或语言限制，读 `<language_root>\README.md`
 
 ## 降级查找顺序
 
@@ -113,6 +121,12 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 - 已知是插件案例时，先开 `<examples_root>\plugins\README.md`
 - 再根据插件类别进入 `插件示例/表单插件-场景拆分/README.md`、`插件示例/字段控件-场景拆分/README.md`、`插件示例/控件-场景拆分/README.md`、`插件示例/单据体-场景拆分/README.md`、`插件示例/报表查询插件-场景拆分/README.md` 这类目录 README
 - 只有目录名时，必须继续打开该目录里的具体 `*.md`，不能只回答“去这个目录找”
+
+### 从 docs 收敛
+
+- 已知是 KWC、脚本控制器、Web API、REST API 开发时，先开 `<references_root>\docs\custom-development\README.md`
+- 再进入 `脚本控制器开发指南.md`
+- 如果只需要某一块规则，可继续在该文档中检索 `permission`、`url`、`request`、`response`、`version` 等关键字
 
 ### 从 sdk 收敛
 
@@ -155,6 +169,7 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 
 ### 生成或修改代码
 
+- 如果目标是 KWC 脚本控制器，先读 `<references_root>\docs\custom-development\脚本控制器开发指南.md`
 - 先读 `<templates_root>\`
 - 再读 `<examples_root>\` 中最相关的示例
 - 生成代码时优先复用已有插件模板和事件写法
@@ -179,6 +194,7 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 
 ### 诊断问题或做风险审查
 
+- 如果问题发生在 KWC controller、接口路由、权限配置、请求响应处理上，先读 `<references_root>\docs\custom-development\脚本控制器开发指南.md`
 - 先找同类场景的 `<examples_root>\`
 - 再核对 `<sdk_root>\` 中的类、方法和生命周期说明
 - 最后核对 `<language_root>\README.md` 及相关语法条目

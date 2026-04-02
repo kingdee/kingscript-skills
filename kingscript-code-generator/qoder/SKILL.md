@@ -28,6 +28,7 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 - `workspace_root`
 - `repo_root`
 - `references_root`
+- `docs_root`
 - `examples_root`
 - `sdk_root`
 - `templates_root`
@@ -45,6 +46,9 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 
 ## 解析后的固定入口
 
+- `<references_root>\docs\README.md`
+- `<references_root>\docs\custom-development\README.md`
+- `<references_root>\docs\custom-development\脚本控制器开发指南.md`
 - `<examples_root>\README.md`
 - `<examples_root>\plugins\README.md`
 - `<templates_root>\README.md`
@@ -59,11 +63,12 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 
 ## 推荐检索顺序
 
-1. 先解析 `references_root / examples_root / sdk_root / templates_root / language_root`
-2. 先看最接近的代码示例：`<examples_root>`
-3. 需要起手骨架时看：`<templates_root>\README.md`
-4. 涉及 SDK 语义时看：`<sdk_root>\README.md`、`<sdk_root>\indexes\`
-5. 涉及语法、关键字和命名规则时看：`<language_root>\README.md`
+1. 先解析 `references_root / docs_root / examples_root / sdk_root / templates_root / language_root`
+2. 用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API` 时，先看：`<references_root>\docs\custom-development\脚本控制器开发指南.md`
+3. 先看最接近的代码示例：`<examples_root>`
+4. 需要起手骨架时看：`<templates_root>\README.md`
+5. 涉及 SDK 语义时看：`<sdk_root>\README.md`、`<sdk_root>\indexes\`
+6. 涉及语法、关键字和命名规则时看：`<language_root>\README.md`
 
 ## 降级查找顺序
 
@@ -94,6 +99,7 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 ## Qoder 下的任务路由
 
 - 用户问“这段代码怎么写”：先去 `<examples_root>`
+- 用户问“KWC controller / 脚本控制器怎么配、怎么写、怎么部署”：先去 `<references_root>\docs\custom-development\脚本控制器开发指南.md`
 - 用户问“这个类/事件是什么”：先去 `<sdk_root>\classes\` 或 `<sdk_root>\packages\`
 - 用户问“我该从哪个插件起手”：先去 `<templates_root>`
 - 用户贴错误或异常：先去 `<sdk_root>\indexes\error-index.md`

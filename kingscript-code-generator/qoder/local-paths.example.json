@@ -2,6 +2,7 @@
   "workspace_root": "D:\\kingscript skills",
   "repo_root": "D:\\kingscript skills\\kingscript-code-generator",
   "references_root": "D:\\kingscript skills\\kingscript-code-generator\\references",
+  "docs_root": "D:\\kingscript skills\\kingscript-code-generator\\references\\docs",
   "examples_root": "D:\\kingscript skills\\kingscript-code-generator\\references\\examples",
   "sdk_root": "D:\\kingscript skills\\kingscript-code-generator\\references\\sdk",
   "templates_root": "D:\\kingscript skills\\kingscript-code-generator\\references\\templates",

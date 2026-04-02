@@ -9,6 +9,7 @@
 ```text
 kingscript-code-generator/
 ├─ references/
+│  ├─ docs/          # 专题开发指南与规则说明
 │  ├─ examples/      # 代码示例
 │  ├─ templates/     # 插件模板
 │  ├─ sdk/           # SDK 声明、索引、开放能力映射
@@ -27,6 +28,7 @@ kingscript-code-generator/
 - 平台差异只放在 `codex/`、`qoder/`、`claude-code/`。
 - 所有文档链接都使用仓库内相对路径，不写死本地绝对目录。
 - 当前 skill 聚焦“快速生成、解释与审查 Kingscript 代码”。
+- 新增 KWC 脚本控制器这类专题资料时，优先沉淀到 `references/docs/`。
 
 ## 安装
 
@@ -122,6 +124,10 @@ Claude Code 安装后，建议先复制 `local-paths.example.json` 为 `local-pa
 ### `references/examples/`
 
 放“这段代码怎么写”的内容，适合查找事件示例、场景代码、完整插件示例。
+
+### `references/docs/`
+
+放“这个能力怎么开发、有哪些规则和边界”的内容，适合查找 KWC 脚本控制器、定制开发专题说明和实现约束。
 
 ### `references/templates/`
 
