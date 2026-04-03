@@ -173,6 +173,9 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 - 先读 `<templates_root>\`
 - 再读 `<examples_root>\` 中最相关的示例
 - 生成代码时优先复用已有插件模板和事件写法
+- 生成代码前，先确认每个外部类、助手类、事件类、枚举和工具类的真实 import 路径；不能只看到示例里用过就省略 import
+- 最终输出代码前，必须逐个自检非全局符号是否已显式 import；不能依赖 IDE、编辑器或运行环境自动补 import
+- 如果某个符号不需要 import，必须能明确说明它是运行时全局、当前文件局部定义，或由框架自动注入
 - 页面提示、通知、消息框相关方法，必须回到 `IFormView` 或本地声明层确认，不把示例里出现过的方法名直接当成可用 API
 - 调用 `obj.method()` 前，必须确认 `method` 属于 `obj` 当前类型或其声明继承链；不能只因为别的事件参数或上下文对象上有同名方法就直接套用
 - 生成代码时不得把事件参数写成 `any`；如果当前版本声明只给出 `BizDataEventArgs` 或 `$.java.util.EventObject`，也必须按声明原样写

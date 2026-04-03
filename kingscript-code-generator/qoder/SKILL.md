@@ -110,6 +110,9 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 
 - 先说明场景，再给代码或结论。
 - 代码前先声明关键假设。
+- 生成代码前先确认每个外部类、助手类、事件类、枚举和工具类的 import 路径。
+- 最终输出前必须自检所有非全局符号都已显式 import，不能依赖 IDE 或编辑器自动导入。
+- 如果某个符号不需要 import，必须说明它是运行时全局、当前文件局部定义，或由框架自动注入。
 - 必须指出风险点和待确认项。
 - 优先复用本 skill 里的示例和模板，不凭空发明 API。
 - 本地知识不够时，按 `indexes -> classes/packages -> manifests -> 外部知识盘(可选) -> 本地 .d.ts -> 在线 Javadoc` 降级。
