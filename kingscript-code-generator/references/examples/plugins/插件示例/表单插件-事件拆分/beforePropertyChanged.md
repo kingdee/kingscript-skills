@@ -43,7 +43,7 @@ class PmPurorderPriceCheckPlugin extends AbstractBillPlugIn {
   beforePropertyChanged(e: PropertyChangedArgs): void {
     super.beforePropertyChanged(e);
 
-    const fieldKey = e.getPropertyName();
+    const fieldKey = e.getProperty().getName();
 
     // 仅拦截单价字段的修改
     if (fieldKey === "price") {
@@ -52,17 +52,17 @@ class PmPurorderPriceCheckPlugin extends AbstractBillPlugIn {
 
       // C 表示已审核状态
       if (billStatus === "C") {
-        // 阻止修改
-        e.setCancel(true);
+        // 阻止修改  抛异常
         this.getView().showTipNotification("已审核的采购订单不允许修改单价");
         return;
       }
 
       // 额外校验：新单价不能为负数
-      const newPrice = e.getNewValue() as BigDecimal;
+      const newPrice = e.getChangeSet()[0].getNewValue().get("price") as BigDecimal;
       if (newPrice != null && newPrice.compareTo(BigDecimal.ZERO) < 0) {
-        e.setCancel(true);
+        
         this.getView().showTipNotification("单价不能为负数");
+         //抛异常
         return;
       }
     }

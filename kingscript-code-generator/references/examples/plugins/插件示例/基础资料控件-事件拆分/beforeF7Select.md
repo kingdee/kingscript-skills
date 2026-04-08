@@ -20,23 +20,27 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
-import { BeforeF7SelectEvent } from "@cosmic/bos-core/kd/bos/form/field/events";
+import { BasedataEdit } from "@cosmic/bos-core/kd/bos/form/field";
+import { BeforeF7SelectEvent, BeforeF7SelectListener } from "@cosmic/bos-core/kd/bos/form/field/events";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
+import { ArrayList } from "@cosmic/bos-script/java/util";
 
-class PurMaterialFilterPlugin extends AbstractBillPlugIn {
+class PurMaterialFilterPlugin extends AbstractBillPlugIn implements BeforeF7SelectListener {
+
+    registerListener(e: $.java.util.EventObject): void {
+        let edit = this.getControl("material") as BasedataEdit;
+        edit.addBeforeF7SelectListener(this);
+    }
 
   beforeF7Select(e: BeforeF7SelectEvent): void {
-    super.beforeF7Select(e);
-
     if (e.getProperty().getName() !== "material") {
       return;
     }
 
     const orgId = this.getModel().getValue("purchaseorg");
-    const filters = [
-      new QFilter("forbidstatus", "=", "A"),
-      new QFilter("useorg.id", "=", orgId)
-    ];
+    let filters = new ArrayList();
+    filters.add(new QFilter("forbidstatus", "=", "A"));
+    filters.add(new QFilter("useorg.id", "=", orgId));
 
     e.setCustomQFilters(filters);
   }

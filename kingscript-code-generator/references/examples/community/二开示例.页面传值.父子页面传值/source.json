@@ -1,0 +1,20 @@
+{
+  "article_id": "716290013872380160",
+  "title": "二开示例.页面传值.父子页面传值",
+  "source_url": "https://vip.kingdee.com/knowledge/716290013872380160?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L2 原文图片转写",
+    "L4 本地资料校对"
+  ],
+  "risk_level": "改字段标识后可用",
+  "local_assets": [
+    "./images/image-01.png",
+    "./images/image-02.png",
+    "./images/image-03.png",
+    "./images/image-04.png",
+    "./images/image-05.png"
+  ],
+  "notes": [
+    "这篇案例和现有 `closedCallBack`、弹窗选资料示例能形成互补。"
+  ]
+}

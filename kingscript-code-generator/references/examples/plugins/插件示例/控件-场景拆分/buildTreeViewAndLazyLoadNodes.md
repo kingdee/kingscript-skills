@@ -73,13 +73,12 @@ class BuildTreeViewAndLazyLoadNodesPlugin extends AbstractFormPlugin {
     let children = new ArrayList();
     children.add(this.createNode(parentId + ".1", "节点 " + parentId + ".1", parentId));
     children.add(this.createNode(parentId + ".2", "节点 " + parentId + ".2", parentId));
-    e.setChildNodes(children);
   }
 
   treeNodeClick(e: TreeNodeEvent): void {
     let nodeId = e.getNodeId();
     if (nodeId != null) {
-      this.getView().showTipNotification("当前节点：" + e.getNodeText());
+      this.getView().showTipNotification("当前节点：" + e.getNodeId());
     }
   }
 
@@ -107,8 +106,8 @@ class BuildTreeViewAndLazyLoadNodesPlugin extends AbstractFormPlugin {
   }
 
   treeNodeDragged(e: TreeNodeDragEvent): void {
-    let dragNodeId = e.getDragNodeId();
-    let dropNodeId = e.getDropNodeId();
+    let dragNodeId = e.getFromParentId();
+    let dropNodeId = e.getToParentId();
 
     if (dragNodeId == null || dropNodeId == null) {
       return;

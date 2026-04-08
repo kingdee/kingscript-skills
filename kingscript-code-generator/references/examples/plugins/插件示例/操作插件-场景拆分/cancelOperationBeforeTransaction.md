@@ -19,15 +19,15 @@
 ## 完整 Kingscript 示例
 
 ```typescript
-import { AbstractOperationServicePlugIn } from "@cosmic/bos-core/kd/bos/entity/plugin";
-import { BeforeOperationArgs, PreparePropertysEventArgs } from "@cosmic/bos-core/kd/bos/entity/plugin/args";
+
+import { AbstractOperationServicePlugIn, PreparePropertysEventArgs } from "@cosmic/bos-core/kd/bos/entity/plugin";
+import { BeforeOperationArgs } from "@cosmic/bos-core/kd/bos/entity/plugin/args";
 import { ErrorLevel, ValidationErrorInfo } from "@cosmic/bos-core/kd/bos/entity/validate";
+import { ArrayList } from "@cosmic/bos-script/java/util";
 
 class BeforeTransactionScenePlugin extends AbstractOperationServicePlugIn {
 
   onPreparePropertys(e: PreparePropertysEventArgs): void {
-    super.onPreparePropertys(e);
-
     let fieldKeys = e.getFieldKeys();
     fieldKeys.add("deliverydate");
     fieldKeys.add("lastdate");
@@ -37,7 +37,7 @@ class BeforeTransactionScenePlugin extends AbstractOperationServicePlugIn {
   beforeExecuteOperationTransaction(e: BeforeOperationArgs): void {
     super.beforeExecuteOperationTransaction(e);
 
-    let filteredList = new $.java.util.ArrayList();
+    let filteredList = new ArrayList();
     let validExtDatas = e.getValidExtDataEntities();
 
     for (let i = 0; i < validExtDatas.size(); i++) {

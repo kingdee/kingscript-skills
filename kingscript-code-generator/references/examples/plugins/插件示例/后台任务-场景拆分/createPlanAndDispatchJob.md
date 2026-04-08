@@ -25,14 +25,15 @@ import {
   PlanInfo
 } from "@cosmic/bos-core/kd/bos/schedule/api";
 import { JobDispatcherProxy } from "@cosmic/bos-core/kd/bos/schedule/server";
-import { Calendar, Date, HashMap } from "@cosmic/bos-script/java/util";
+import { Calendar, HashMap } from "@cosmic/bos-script/java/util";
 import { SimpleDateFormat } from "@cosmic/bos-script/java/text";
+import { LocaleString } from "@cosmic/bos-core/kd/bos/dataentity/entity";
 
 class CreatePlanAndDispatchJobPlugin extends AbstractFormPlugin {
 
   registerListener(e: $.java.util.EventObject): void {
     super.registerListener(e);
-    this.addItemClickListeners(["tbmain"]);
+    this.addItemClickListeners("tbmain");
   }
 
   itemClick(e: ItemClickEvent): void {
@@ -49,7 +50,7 @@ class CreatePlanAndDispatchJobPlugin extends AbstractFormPlugin {
     let planInfo = this.buildPlanInfo(jobInfo);
     dispatcher.createPlan(planInfo);
 
-    this.getView().showMessage("已创建作业和调度计划：" + planInfo.getName());
+    this.getView().showMessage("已创建作业和调度计划：" + planInfo.getlName());
   }
 
   private buildJobInfo(): JobInfo {
@@ -60,7 +61,7 @@ class CreatePlanAndDispatchJobPlugin extends AbstractFormPlugin {
     let jobInfo = new JobInfo();
     jobInfo.setAppId("bos");
     jobInfo.setJobType(JobType.BIZ);
-    jobInfo.setName("页面触发作业_" + suffix);
+    jobInfo.setlName(new LocaleString("页面触发作业_" + suffix));
     jobInfo.setNumber("kdf_job_dynamic_" + suffix);
     jobInfo.setTaskClassname("kd.bos.plugin.sample.schedule.KDFLogTask");
 
@@ -83,7 +84,7 @@ class CreatePlanAndDispatchJobPlugin extends AbstractFormPlugin {
 
     let planInfo = new PlanInfo();
     planInfo.setJobId(jobInfo.getId());
-    planInfo.setName("页面触发计划_" + suffix);
+    planInfo.setlName(new LocaleString("页面触发计划_" + suffix));
     planInfo.setNumber("kdf_plan_dynamic_" + suffix);
     planInfo.setStartTime(startTime);
     planInfo.setEndTime(endTime);

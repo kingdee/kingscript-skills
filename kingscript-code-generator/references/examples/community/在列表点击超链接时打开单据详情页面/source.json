@@ -1,0 +1,18 @@
+{
+  "article_id": "786258020556295680",
+  "title": "在列表点击超链接时打开单据详情页面",
+  "source_url": "https://vip.kingdee.com/knowledge/786258020556295680?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L3 Java 逻辑转 KS",
+    "L4 本地资料校对"
+  ],
+  "risk_level": "改字段标识后可用",
+  "local_assets": [
+    "./images/image-01.gif",
+    "./images/image-02.png",
+    "./images/image-03.png"
+  ],
+  "notes": [
+    "本地列表插件示例已经覆盖 `hyperLinkClick + BillShowParameter` 的基本模式。"
+  ]
+}

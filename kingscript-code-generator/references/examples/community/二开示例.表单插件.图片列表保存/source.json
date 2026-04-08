@@ -1,0 +1,22 @@
+{
+  "article_id": "768509214821451264",
+  "title": "二开示例.表单插件.图片列表保存",
+  "source_url": "https://vip.kingdee.com/knowledge/768509214821451264?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L2 原文图片转写",
+    "L4 本地资料校对",
+    "L5 推断补全"
+  ],
+  "risk_level": "需按实际元数据调整",
+  "local_assets": [
+    "./images/image-01.png",
+    "./images/image-02.png",
+    "./images/image-03.png",
+    "./images/image-04.png",
+    "./images/image-05.png",
+    "./images/image-06.png"
+  ],
+  "notes": [
+    "这篇案例的关键在“图片交互”和“持久化存储”拆开处理。"
+  ]
+}

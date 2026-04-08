@@ -44,8 +44,8 @@ class PmPurorderSupplierFillPlugin extends AbstractBillPlugIn {
   registerListener(e: $.java.util.EventObject): void {
     super.registerListener(e);
 
-    // 注册自定义按钮点击监听
-    this.addItemClickService("btn_select_supplier");
+    // 注册的是工具栏控件标识，不是按钮 itemKey；这里假设按钮挂在主工具栏 tbmain 上
+    this.addItemClickListeners("tbmain");
   }
 
   itemClick(e: ItemClickEvent): void {

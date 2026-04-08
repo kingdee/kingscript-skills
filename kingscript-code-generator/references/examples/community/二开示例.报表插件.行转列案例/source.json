@@ -1,0 +1,21 @@
+{
+  "article_id": "768528049645749760",
+  "title": "二开示例.报表插件.行转列案例",
+  "source_url": "https://vip.kingdee.com/knowledge/768528049645749760?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L2 原文图片转写",
+    "L4 本地资料校对",
+    "L5 推断补全"
+  ],
+  "risk_level": "推断版，建议先验证",
+  "local_assets": [
+    "./images/image-01.png",
+    "./images/image-02.png",
+    "./images/image-03.png",
+    "./images/image-04.png",
+    "./images/image-05.png"
+  ],
+  "notes": [
+    "这是一个典型的“算法稳定、具体报表接线因项目而异”的案例。"
+  ]
+}

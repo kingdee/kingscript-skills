@@ -5,13 +5,11 @@
 ## 事件目录
 
 - [listBeforeBindData.md](listBeforeBindData.md)
-- [dataSelect.md](dataSelect.md)
 - [billClosedCallBack.md](billClosedCallBack.md)
 - [beforePackageData.md](beforePackageData.md)
 
 ## 使用建议
 
 - 需要初始化列表过滤条件时，先看 `listBeforeBindData`。
-- 需要获取列表勾选结果时，先看 `dataSelect`。
 - 需要处理从列表打开单据后的关闭回调时，先看 `billClosedCallBack`。
 - 需要在列表输出前补充数据包字段时，先看 `beforePackageData`。

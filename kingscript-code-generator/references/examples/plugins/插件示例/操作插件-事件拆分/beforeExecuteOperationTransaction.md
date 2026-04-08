@@ -21,7 +21,7 @@
 ```typescript
 import { AbstractOperationServicePlugIn } from "@cosmic/bos-core/kd/bos/entity/plugin";
 import { BeforeOperationArgs } from "@cosmic/bos-core/kd/bos/entity/plugin/args";
-import { KDException } from "@cosmic/bos-core/kd/bos/exception";
+import { KDBizException } from "@cosmic/bos-core/kd/bos/exception";
 
 class AuditCheckPlugin extends AbstractOperationServicePlugIn {
 
@@ -32,7 +32,7 @@ class AuditCheckPlugin extends AbstractOperationServicePlugIn {
     for (let i = 0; i < dataEntities.length; i++) {
       const billNo = dataEntities[i].get("billno");
       if (billNo == null || billNo === "") {
-        throw new KDException("单据编号为空，不能继续执行审核。");
+        throw new KDBizException("单据编号为空，不能继续执行审核。");
       }
     }
   }

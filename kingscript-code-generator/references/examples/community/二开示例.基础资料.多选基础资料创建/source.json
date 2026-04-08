@@ -1,0 +1,15 @@
+{
+  "article_id": "675284215226719488",
+  "title": "二开示例.基础资料.多选基础资料创建",
+  "source_url": "https://vip.kingdee.com/knowledge/675284215226719488?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L3 Java 逻辑转 KS",
+    "L4 本地资料校对",
+    "L5 推断补全"
+  ],
+  "risk_level": "改字段标识后可用",
+  "local_assets": [],
+  "notes": [
+    "原文更偏创建对象，这里转成前台更常用的回填写法。"
+  ]
+}

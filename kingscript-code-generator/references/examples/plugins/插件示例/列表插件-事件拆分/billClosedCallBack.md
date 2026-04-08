@@ -14,23 +14,23 @@
 
 ## 业务场景
 
-用户从销售订单列表打开一张单据编辑并保存，返回列表后自动刷新当前列表并保留原查询条件。
+用户从销售订单列表打开一张单据编辑并保存，返回列表后自动刷新当前列表。
 
 ## 完整示例代码
 
 ```typescript
-import { AbstractListPlugIn } from "@cosmic/bos-core/kd/bos/list/plugin";
+import { AbstractListPlugin } from "@cosmic/bos-core/kd/bos/list/plugin";
 import { BillClosedCallBackEvent } from "@cosmic/bos-core/kd/bos/list/events";
+import { ListView } from "@cosmic/bos-core/kd/bos/mvc/list";
 
-class SalesOrderBillClosePlugin extends AbstractListPlugIn {
+class SalesOrderBillClosePlugin extends AbstractListPlugin {
 
   billClosedCallBack(e: BillClosedCallBackEvent): void {
     super.billClosedCallBack(e);
 
-    if (e.getBillOperationStatus() === "save") {
-      this.getView().refresh();
-      this.getView().showSuccessNotification("单据已保存，列表已刷新");
-    }
+    let listView =this.getView() as ListView;
+    listView.refresh();
+    listView.showSuccessNotification("单据已保存，列表已刷新");
   }
 }
 

@@ -5,7 +5,8 @@
 ## 案例列表
 
 - [`queryAndExportByFilter.md`](./queryAndExportByFilter.md): 同一套过滤条件驱动页面查询、整表导出和按组织分 Sheet 导出
-- [`treeReportLeftRightQuery.md`](./treeReportLeftRightQuery.md): 左侧树或分组节点驱动右侧明细表，并按过滤条件动态增减列
+- [`treeLeftGroupQuery.md`](./treeLeftGroupQuery.md): 左侧树/分组节点取数，并按过滤条件动态增减左侧列
+- [`treeRightListQuery.md`](./treeRightListQuery.md): 右侧明细表复用公共过滤并叠加当前选中左侧节点
 
 ## 使用建议
 

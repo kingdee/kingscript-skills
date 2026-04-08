@@ -1,0 +1,26 @@
+{
+  "article_id": "743882537025228544",
+  "title": "二开示例.表单插件.如何获取物料的物料编码",
+  "source_url": "https://vip.kingdee.com/knowledge/743882537025228544?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L2 原文图片转写",
+    "L4 本地资料校对",
+    "L5 推断补全"
+  ],
+  "risk_level": "推断版，建议先验证",
+  "local_assets": [
+    "./images/image-01.png",
+    "./images/image-02.png",
+    "./images/image-03.png",
+    "./images/image-04.png",
+    "./images/image-05.png",
+    "./images/image-06.png",
+    "./images/image-07.png",
+    "./images/image-08.png"
+  ],
+  "notes": [
+    "原文以截图和说明为主，没有完整文本版 Kingscript。",
+    "case.md 中保留了 OCR 得到的核心判断逻辑，并整理成固定字段映射版。",
+    "是否使用 masterid.number 取值，取决于字段底层业务政策结构。"
+  ]
+}

@@ -15,18 +15,19 @@
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
 import { MulBasedataEdit } from "@cosmic/bos-core/kd/bos/form/field";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
+import { ArrayList } from "@cosmic/bos-script/java/util";
 
 class MultiAssistantFilterPlugin extends AbstractBillPlugIn {
 
   configAssistantFilter(): void {
     const edit = this.getView().getControl("assistantfield") as MulBasedataEdit;
     const orgId = this.getModel().getValue("useorg");
-
-    edit.setQFilters([
-      new QFilter("forbidstatus", "=", "A"),
-      new QFilter("useorg.id", "=", orgId)
-    ]);
-    edit.setShowOnlyAudited(true);
+    let list = new ArrayList();
+    let f1 = new QFilter("forbidstatus", "=", "A");
+    let f2 = new QFilter("useorg.id", "=", orgId);
+    list.add(f1);
+    list.add(f2);
+    edit.setQFilters(list);
   }
 }
 

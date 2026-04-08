@@ -1,0 +1,21 @@
+{
+  "article_id": "716295294820029952",
+  "title": "二开示例.列表插件.动态列实现",
+  "source_url": "https://vip.kingdee.com/knowledge/716295294820029952?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L2 原文图片转写",
+    "L4 本地资料校对",
+    "L5 推断补全"
+  ],
+  "risk_level": "需按实际元数据调整",
+  "local_assets": [
+    "./images/image-01.png",
+    "./images/image-02.png",
+    "./images/image-03.png",
+    "./images/image-04.png",
+    "./images/image-05.png"
+  ],
+  "notes": [
+    "本地 SDK 已确认 `BeforeCreateListColumnsArgs.addListColumn(...)` 与 `DynamicTextListColumn` 存在。"
+  ]
+}

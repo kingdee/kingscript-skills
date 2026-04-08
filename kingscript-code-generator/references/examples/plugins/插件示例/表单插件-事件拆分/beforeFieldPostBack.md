@@ -38,7 +38,7 @@ class PmPurorderPostBackControlPlugin extends AbstractBillPlugIn {
   beforeFieldPostBack(e: BeforeFieldPostBackEvent): void {
     super.beforeFieldPostBack(e);
 
-    const fieldKey = e.getFieldKey();
+    const fieldKey = e.getKey();
 
     // 定义不需要回传服务器的字段列表
     // 这些字段的值变更不涉及服务端联动计算

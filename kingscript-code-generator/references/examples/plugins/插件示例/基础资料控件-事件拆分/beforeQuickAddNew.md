@@ -20,14 +20,15 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { BasedataEdit } from "@cosmic/bos-core/kd/bos/form/field";
 import { BeforeQuickAddNewEvent } from "@cosmic/bos-core/kd/bos/form/field/events";
 
 class SupplierQuickAddGuardPlugin extends AbstractBillPlugIn {
 
   beforeQuickAddNew(e: BeforeQuickAddNewEvent): void {
-    super.beforeQuickAddNew(e);
 
-    if (e.getFieldKey() !== "supplier") {
+    let edit = e.getSource() as BasedataEdit;
+    if (edit.getFieldKey() !== "supplier") {
       return;
     }
 

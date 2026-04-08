@@ -1,0 +1,17 @@
+{
+  "article_id": "738057408810658816",
+  "title": "二开示例：KingScript.点击菜单按钮跳转外部url",
+  "source_url": "https://vip.kingdee.com/knowledge/738057408810658816?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L1 原文直取",
+    "L4 本地资料校对"
+  ],
+  "risk_level": "改字段标识后可用",
+  "local_assets": [
+    "./images/image-01.gif",
+    "./images/image-02.png"
+  ],
+  "notes": [
+    "这篇与“点击超链接打开详情页”可以形成一内一外两个跳转模板。"
+  ]
+}

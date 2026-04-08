@@ -10,7 +10,7 @@
 
 ## 说明
 
-当页面通过视图能力开启定时器后，系统会按设定间隔回调 `timerElapsed`。这个事件适合做轻量刷新、看板轮询、超时检查，不适合在回调里执行耗时过长的逻辑。
+当页面或宿主已经开启定时器后，系统会按设定间隔回调 `timerElapsed`。这个事件适合做轻量刷新、看板轮询、超时检查，不适合在回调里执行耗时过长的逻辑。定时器的启动/停止入口要以当前版本 SDK 声明为准。
 
 ## 业务场景
 
@@ -19,24 +19,22 @@
 ## 完整示例代码
 
 ```typescript
-import { AbstractFormPlugIn } from "@cosmic/bos-core/kd/bos/form/plugin";
+import { AbstractFormPlugin } from "@cosmic/bos-core/kd/bos/form/plugin";
 import { TimerElapsedArgs } from "@cosmic/bos-core/kd/bos/form/events";
 import { QueryServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
 
-class SalesBoardTimerPlugin extends AbstractFormPlugIn {
+class SalesBoardTimerPlugin extends AbstractFormPlugin {
 
   afterBindData(e: $.java.util.EventObject): void {
     super.afterBindData(e);
-    this.getView().startTimer(30000);
+    // 定时器启动入口需按当前版本 SDK 声明确认，这里不直接假设具体 API 名称。
   }
 
   timerElapsed(e: TimerElapsedArgs): void {
-    super.timerElapsed(e);
-
     const summary = QueryServiceHelper.queryOne(
       "bos_dashboard_summary",
       "todo_count,warning_count",
-      null
+      NULL
     );
 
     if (summary != null) {
@@ -49,7 +47,7 @@ class SalesBoardTimerPlugin extends AbstractFormPlugIn {
 
   pageRelease(e: $.java.util.EventObject): void {
     super.pageRelease(e);
-    this.getView().stopTimer();
+    // 定时器移除入口需按当前版本 SDK 声明确认，这里不直接假设具体 API 名称。
   }
 }
 
@@ -60,5 +58,5 @@ export { plugin };
 ## 注意事项
 
 - 定时器逻辑要尽量轻，避免回调堆积。
-- 页面关闭或释放时要记得停止定时器。
+- 页面关闭或释放时要记得按当前版本 SDK 的真实入口移除定时器。
 - 如果页面有手动刷新按钮，轮询与手动刷新最好共用同一段查询逻辑。

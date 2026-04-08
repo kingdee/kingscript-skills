@@ -58,8 +58,7 @@ class PmPurorderExchangeRatePlugin extends AbstractBillPlugIn {
         new QFilter("targetcurrency.isbasecurrency", "=", true),
         new QFilter("org", "=", orgId),
         new QFilter("effectdate", "<=", new Date())
-      ],
-      "effectdate desc"
+      ]
     );
 
     if (rateInfo != null) {

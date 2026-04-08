@@ -44,9 +44,8 @@ class SmSalorderCalcPlugin extends AbstractBillPlugIn {
     super.propertyChanged(e);
 
     let needRecalcTotal = false;
-
+    const fieldKey = e.getProperty().getName();
     for (const change of e.getChangeSet()) {
-      const fieldKey = change.getPropertyName();
       const rowIndex = change.getRowIndex();
 
       if (fieldKey === "qty" || fieldKey === "price" || fieldKey === "taxrate") {

@@ -22,20 +22,20 @@
 ```typescript
 import { AbstractFormPlugin } from "@cosmic/bos-core/kd/bos/form/plugin";
 import { Control } from "@cosmic/bos-core/kd/bos/form/control";
-import { ConfirmCallBackListener } from "@cosmic/bos-core/kd/bos/form/confirm";
+import { ConfirmCallBackListener } from "@cosmic/bos-core/kd/bos/form";
 import { MessageBoxClosedEvent } from "@cosmic/bos-core/kd/bos/form/events";
-import { MessageBoxOptions, MessageBoxResult } from "@cosmic/bos-core/kd/bos/form/message";
+import { MessageBoxOptions, MessageBoxResult } from "@cosmic/bos-core/kd/bos/form";
 
 class FormMessageScenePlugin extends AbstractFormPlugin {
 
   registerListener(e: $.java.util.EventObject): void {
     super.registerListener(e);
 
-    this.addClickListeners([
+    this.addClickListeners(
       "btn_show_message",
       "btn_show_error",
       "btn_delete_row"
-    ]);
+    );
   }
 
   click(e: $.java.util.EventObject): void {

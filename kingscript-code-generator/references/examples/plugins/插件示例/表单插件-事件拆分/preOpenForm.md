@@ -29,7 +29,7 @@
 ## 完整示例代码
 
 ```typescript
-import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { AbstractBillPlugIn, BillShowParameter } from "@cosmic/bos-core/kd/bos/bill";
 import { PreOpenFormEventArgs } from "@cosmic/bos-core/kd/bos/form/events";
 import { QueryServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
@@ -44,7 +44,7 @@ class ApPaybillAccessPlugin extends AbstractBillPlugIn {
     super.preOpenForm(e);
 
     const currentUserId = RequestContext.get().getCurrUserId();
-    const formShowParameter = this.getView().getFormShowParameter();
+    const formShowParameter = this.getView().getFormShowParameter() as BillShowParameter;
     const pkId = formShowParameter.getPkId();
 
     if (pkId == null || pkId === "0" || pkId === "") {

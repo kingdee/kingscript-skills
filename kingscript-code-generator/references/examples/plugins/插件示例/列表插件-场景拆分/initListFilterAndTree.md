@@ -26,9 +26,12 @@ import { AbstractTreeListPlugin } from "@cosmic/bos-core/kd/bos/list/plugin";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
 import { FilterContainerInitArgs, SetFilterEvent } from "@cosmic/bos-core/kd/bos/form/events";
 import { BeforeFilterF7SelectEvent } from "@cosmic/bos-core/kd/bos/form/field/events";
+import { RequestContext } from "@cosmic/bos-core/kd/bos/context";
+import { CommonFilterColumn } from "@cosmic/bos-core/kd/bos/filter";
+import { LocaleString } from "@cosmic/bos-core/kd/bos/dataentity/entity";
 
 class ListInitScenePlugin extends AbstractTreeListPlugin {
-  currentOrgId: string;
+  currentOrgId!: string;
 
   initializeTree(e: $.java.util.EventObject): void {
     super.initializeTree(e);
@@ -42,16 +45,16 @@ class ListInitScenePlugin extends AbstractTreeListPlugin {
   filterContainerInit(args: FilterContainerInitArgs): void {
     super.filterContainerInit(args);
 
-    this.currentOrgId = String($.kd.bos.context.RequestContext.get().getOrgId());
+    this.currentOrgId = String(RequestContext.get().getOrgId());
 
     let columns = args.getFilterContainerInitEvent().getCommonFilterColumns();
-    let orgColumn = new $.kd.bos.filter.CommonFilterColumn();
+    let orgColumn = new CommonFilterColumn();
     orgColumn.setKey("orgfilter.id");
     orgColumn.setFieldName("orgfilter.id");
     orgColumn.setType("enum");
     orgColumn.setMustInput(true);
     orgColumn.setDefaultValue(this.currentOrgId);
-    orgColumn.setCaption(new $.kd.bos.dataentity.entity.LocaleString("业务单元"));
+    orgColumn.setCaption(new LocaleString("业务单元"));
 
     if (!columns.contains(orgColumn)) {
       columns.add(orgColumn);
@@ -76,7 +79,7 @@ class ListInitScenePlugin extends AbstractTreeListPlugin {
 
     let filters = e.getQFilters();
     filters.add(new QFilter("org.id", "=", this.currentOrgId));
-    e.setQFilters(filters);
+    e.setCustomQFilters(filters);
   }
 }
 

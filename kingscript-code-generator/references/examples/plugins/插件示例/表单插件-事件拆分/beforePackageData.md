@@ -20,22 +20,23 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { RequestContext } from "@cosmic/bos-core/kd/bos/context";
+import { DynamicObject, DynamicObjectCollection } from "@cosmic/bos-core/kd/bos/dataentity/entity";
 import { BeforePackageDataEvent } from "@cosmic/bos-core/kd/bos/entity/datamodel/events";
 
 class PurOrderPrintPackagePlugin extends AbstractBillPlugIn {
 
-  registerListener(e: $.java.util.EventObject): void {
-    super.registerListener(e);
-    this.getModel().addDataModelListener(this);
-  }
-
   beforePackageData(e: BeforePackageDataEvent): void {
-    const dataPackage = e.getDataPackage();
-    const currentUser = this.getView().getContext().getCurrentUserName();
+    const dataPackage = e.getPageData() as DynamicObjectCollection;
+    const currentUser = RequestContext.get().getUserName();
     const approveNote = this.getModel().getValue("approve_note");
 
-    dataPackage.put("ext_print_user", currentUser);
-    dataPackage.put("ext_approve_note", approveNote);
+    for (let i = 0; i < dataPackage.size(); i++) {
+      const row = dataPackage.get(i) as DynamicObject;
+      row.set("ext_print_user", currentUser);
+      row.set("ext_approve_note", approveNote);
+    }
+    
   }
 }
 

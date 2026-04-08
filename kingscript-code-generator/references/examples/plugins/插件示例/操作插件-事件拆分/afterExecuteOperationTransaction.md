@@ -12,9 +12,6 @@
 
 适合读取本次执行结果，补充提示、日志或为后续链路收集成功主键。
 
-## 业务场景
-
-批量保存后，根据成功主键数量写入一条统一的结果消息。
 
 ## 完整示例代码
 
@@ -26,12 +23,6 @@ class SaveResultPlugin extends AbstractOperationServicePlugIn {
 
   afterExecuteOperationTransaction(e: AfterOperationArgs): void {
     super.afterExecuteOperationTransaction(e);
-
-    const result = e.getOperationResult();
-    if (result != null && result.isSuccess()) {
-      const pkIds = result.getSuccessPkIds();
-      result.setMessage("本次成功处理 " + pkIds.size() + " 条数据。");
-    }
   }
 }
 

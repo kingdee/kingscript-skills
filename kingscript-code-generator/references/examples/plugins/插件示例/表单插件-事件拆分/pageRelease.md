@@ -19,18 +19,18 @@
 ## 完整示例代码
 
 ```typescript
-import { AbstractFormPlugIn } from "@cosmic/bos-core/kd/bos/form/plugin";
+import { AbstractFormPlugin } from "@cosmic/bos-core/kd/bos/form/plugin";
 
-class ResourceCleanupPlugin extends AbstractFormPlugIn {
+class ResourceCleanupPlugin extends AbstractFormPlugin {
 
   afterBindData(e: $.java.util.EventObject): void {
     super.afterBindData(e);
-    this.getView().startTimer(15000);
+    // 定时器启动入口需按当前版本 SDK 声明确认，这里不直接假设具体 API 名称。
   }
 
   pageRelease(e: $.java.util.EventObject): void {
     super.pageRelease(e);
-    this.getView().stopTimer();
+    // 定时器移除入口需按当前版本 SDK 声明确认，这里不直接假设具体 API 名称。
   }
 }
 

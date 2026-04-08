@@ -19,8 +19,7 @@
 ## 完整示例代码
 
 ```typescript
-import { AbstractOperationServicePlugIn } from "@cosmic/bos-core/kd/bos/entity/plugin";
-import { PreparePropertysEventArgs } from "@cosmic/bos-core/kd/bos/entity/plugin/args";
+import { AbstractOperationServicePlugIn, PreparePropertysEventArgs } from "@cosmic/bos-core/kd/bos/entity/plugin";
 
 class SaleOrderAuditOpPlugin extends AbstractOperationServicePlugIn {
 

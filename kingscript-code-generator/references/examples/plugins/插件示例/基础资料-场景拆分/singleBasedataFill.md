@@ -14,27 +14,34 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
-import { BeforeF7SelectEvent, AfterF7SelectEvent } from "@cosmic/bos-core/kd/bos/form/field/events";
+import { BeforeF7SelectEvent, AfterF7SelectEvent, BeforeF7SelectListener, AfterF7SelectListener } from "@cosmic/bos-core/kd/bos/form/field/events";
 import { QueryServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
+import { ArrayList } from "@cosmic/bos-script/java/util";
+import { BasedataEdit } from "@cosmic/bos-core/kd/bos/form/field";
 
-class SupplierScenePlugin extends AbstractBillPlugIn {
+class SupplierScenePlugin extends AbstractBillPlugIn implements BeforeF7SelectListener, AfterF7SelectListener{
+
+    registerListener(e: $.java.util.EventObject): void {
+        let edit = this.getControl("supplier") as BasedataEdit;
+        edit.addBeforeF7SelectListener(this);
+        edit.addAfterF7SelectListener(this);
+    }
 
   beforeF7Select(e: BeforeF7SelectEvent): void {
-    super.beforeF7Select(e);
-
     if (e.getProperty().getName() !== "supplier") {
       return;
     }
 
     const orgId = this.getModel().getValue("purchaseorg");
-    e.setCustomQFilters([new QFilter("useorg.id", "=", orgId)]);
+    let list = new ArrayList();
+    list.add(new QFilter("useorg.id", "=", orgId));
+    e.setCustomQFilters(list);
   }
 
   afterF7Select(e: AfterF7SelectEvent): void {
-    super.afterF7Select(e);
-
-    if (e.getProperty().getName() !== "supplier") {
+    let edit = e.getSource() as BasedataEdit;
+    if (edit.getFieldKey() !== "supplier") {
       return;
     }
 

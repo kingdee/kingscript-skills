@@ -74,11 +74,9 @@ class RegisterListenersScenePlugin extends AbstractFormPlugin {
 
   treeNodeClick(e: $.kd.bos.form.control.events.TreeNodeEvent): void {
     let nodeId = e.getNodeId();
-    let nodeText = e.getNodeText();
 
     if (nodeId != null) {
       this.getModel().setValue("currentnodeid", nodeId);
-      this.getView().showTipNotification("已切换到节点：" + nodeText);
     }
   }
 }

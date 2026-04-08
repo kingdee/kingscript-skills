@@ -1,0 +1,18 @@
+{
+  "article_id": "735947481094819328",
+  "title": "二开示例.点击文本框弹窗选择单据",
+  "source_url": "https://vip.kingdee.com/knowledge/735947481094819328?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN&islogin=true",
+  "source_levels": [
+    "L1 原文直取",
+    "L4 本地资料校对"
+  ],
+  "risk_level": "改字段标识后可用",
+  "local_assets": [
+    "./images/image-01.gif",
+    "./images/image-02.png"
+  ],
+  "notes": [
+    "原文同时提供 Java 与 Kingscript。",
+    "case.md 以原文 Kingscript 为主，仅补了空值判断和说明。"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "article_id": "783345969277650944",
+  "title": "二开方案.表单插件.基础资料根据前置条件匹配过滤条件",
+  "source_url": "https://vip.kingdee.com/knowledge/783345969277650944?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L2 原文图片转写",
+    "L4 本地资料校对",
+    "L5 推断补全"
+  ],
+  "risk_level": "需按实际元数据调整",
+  "local_assets": [],
+  "notes": [
+    "本质上是 `beforeF7Select` 的条件分支模板。"
+  ]
+}

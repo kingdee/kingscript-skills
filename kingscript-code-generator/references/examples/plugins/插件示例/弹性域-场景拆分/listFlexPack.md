@@ -12,19 +12,19 @@
 ## 完整示例代码
 
 ```typescript
-import { AbstractListPlugIn } from "@cosmic/bos-core/kd/bos/list/plugin";
+import { AbstractListPlugin } from "@cosmic/bos-core/kd/bos/list/plugin";
 import { BeforePackageDataEvent } from "@cosmic/bos-core/kd/bos/entity/datamodel/events";
 
-class FlexListPackPlugin extends AbstractListPlugIn {
+class FlexListPackPlugin extends AbstractListPlugin {
 
   beforePackageData(e: BeforePackageDataEvent): void {
     super.beforePackageData(e);
 
-    const dataEntitys = e.getDataEntitys();
-    for (let i = 0; i < dataEntitys.length; i++) {
-      const flexValue = dataEntitys[i].get("materialflex");
+    const dataEntitys = e.getPageData();
+    for (let i = 0; i < dataEntitys.size(); i++) {
+      const flexValue = dataEntitys.get(i).get("materialflex");
       if (flexValue != null) {
-        dataEntitys[i].set("cust_materialflex_text", flexValue.get("name"));
+        dataEntitys.get(i).set("cust_materialflex_text", flexValue.get("name"));
       }
     }
   }

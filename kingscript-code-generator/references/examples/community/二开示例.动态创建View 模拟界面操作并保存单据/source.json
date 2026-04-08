@@ -1,0 +1,17 @@
+{
+  "article_id": "715865765693522688",
+  "title": "二开示例.动态创建View 模拟界面操作并保存单据",
+  "source_url": "https://vip.kingdee.com/knowledge/715865765693522688?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L3 Java 逻辑转 KS",
+    "L4 本地资料校对",
+    "L5 推断补全"
+  ],
+  "risk_level": "推断版，建议先验证",
+  "local_assets": [],
+  "notes": [
+    "原文仅提供 Java 代码。",
+    "FormConfigFactory 未在当前 skill 的本地知识卡中沉淀，case.md 使用 Java bridge 方式标注。",
+    "重点风险在 releaseView 和 SessionManager.reset。"
+  ]
+}

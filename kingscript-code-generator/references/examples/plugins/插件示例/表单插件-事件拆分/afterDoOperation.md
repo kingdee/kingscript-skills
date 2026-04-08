@@ -34,8 +34,9 @@
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
 import { AfterDoOperationEventArgs } from "@cosmic/bos-core/kd/bos/form/events";
 import { OperationServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper/operation";
-import { ConvertServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
+import { ConvertServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper/botp";
 import { PushArgs } from "@cosmic/bos-core/kd/bos/entity/botp/runtime";
+import { ArrayList } from "@cosmic/bos-script/java/util";
 
 /**
  * 采购订单表单插件 - 审核通过后自动下推生成采购入库单
@@ -63,25 +64,21 @@ class PmPurorderAutoPushPlugin extends AbstractBillPlugIn {
 
   private autoPushToInboundBill(sourceBillId: any): void {
     try {
-      const pushArgs = new PushArgs();
-      pushArgs.setSourceFormId("pm_purorder");
-      pushArgs.setTargetFormId("im_purinbill");
+      const pushArgs = new PushArgs("pm_purorder", "im_purinbill", new ArrayList());
 
       const sourceIds: any[] = [sourceBillId];
-      pushArgs.setBillIds(sourceIds);
-      pushArgs.setConvertRuleKey("purorder_to_purinbill");
 
       const pushResult = ConvertServiceHelper.push(pushArgs);
 
       if (pushResult != null && pushResult.isSuccess()) {
-        const targetBills = pushResult.getTargetDataEntities();
+        const targetBills = pushResult.getTargetBillIds();
 
-        if (targetBills != null && targetBills.length > 0) {
+        if (targetBills != null && targetBills.size() > 0) {
           const saveResult = OperationServiceHelper.executeOperate(
             "save",
             "im_purinbill",
-            targetBills,
-            null
+            targetBills.toArray(),
+            NULL
           );
 
           if (saveResult.isSuccess()) {

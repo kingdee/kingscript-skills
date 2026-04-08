@@ -20,6 +20,7 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
+import { RequestContext } from "@cosmic/bos-core/kd/bos/context";
 
 class ContractWatermarkPlugin extends AbstractBillPlugIn {
 
@@ -28,11 +29,9 @@ class ContractWatermarkPlugin extends AbstractBillPlugIn {
 
     const billNo = this.getModel().getValue("billno") as string;
     const orgName = this.getModel().getValue("org") as string;
-    const userName = this.getView().getContext().getCurrentUserName();
+    const userName = RequestContext.get().getUserName();
 
-    e.setWaterMarkText("评审中");
-    e.setWaterMarkSubText("用户:" + userName + " 组织:" + orgName);
-    e.setWaterMarkFooter("单号:" + billNo);
+    e.getWaterMark().setText("评审中");
   }
 }
 

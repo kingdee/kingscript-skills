@@ -20,8 +20,7 @@
 ## 完整 Kingscript 示例
 
 ```typescript
-import { AbstractOperationServicePlugIn } from "@cosmic/bos-core/kd/bos/entity/plugin";
-import { AddValidatorsEventArgs, PreparePropertysEventArgs } from "@cosmic/bos-core/kd/bos/entity/plugin/args";
+import { AbstractOperationServicePlugIn, PreparePropertysEventArgs, AddValidatorsEventArgs } from "@cosmic/bos-core/kd/bos/entity/plugin";
 import { AbstractValidator, ErrorLevel, ValidationErrorInfo } from "@cosmic/bos-core/kd/bos/entity/validate";
 
 class DeliveryDateValidator extends AbstractValidator {

@@ -20,16 +20,21 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
-import { AfterF7SelectEvent } from "@cosmic/bos-core/kd/bos/form/field/events";
+import { AfterF7SelectEvent, AfterF7SelectListener } from "@cosmic/bos-core/kd/bos/form/field/events";
 import { QueryServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
+import { BasedataEdit } from "@cosmic/bos-core/kd/bos/form/field";
 
-class SupplierFillPlugin extends AbstractBillPlugIn {
+class SupplierFillPlugin extends AbstractBillPlugIn implements AfterF7SelectListener{
+
+    registerListener(e: $.java.util.EventObject): void {
+        let edit = this.getControl("supplier") as BasedataEdit;
+        edit.addAfterF7SelectListener(this);
+    }
 
   afterF7Select(e: AfterF7SelectEvent): void {
-    super.afterF7Select(e);
-
-    if (e.getProperty().getName() !== "supplier") {
+    let edit = e.getSource() as BasedataEdit;
+    if (edit.getFieldKey() !== "supplier") {
       return;
     }
 

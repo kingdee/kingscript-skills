@@ -20,27 +20,34 @@
 
 ```typescript
 import { AbstractBillPlugIn } from "@cosmic/bos-core/kd/bos/bill";
-import { BeforeFilterF7SelectEvent } from "@cosmic/bos-core/kd/bos/form/field/events";
+import { FilterContainer } from "@cosmic/bos-core/kd/bos/filter";
+import { BasedataEdit } from "@cosmic/bos-core/kd/bos/form/field";
+import { BeforeFilterF7SelectEvent, BeforeFilterF7SelectListener } from "@cosmic/bos-core/kd/bos/form/field/events";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
 
-class ExpenseDeptFilterPlugin extends AbstractBillPlugIn {
+class ExpenseDeptFilterPlugin extends AbstractBillPlugIn implements BeforeFilterF7SelectListener {
 
-  beforeFilterF7Select(e: BeforeFilterF7SelectEvent): void {
-    super.beforeFilterF7Select(e);
 
-    if (e.getFieldKey() !== "expensedept") {
-      return;
+    registerListener(e: $.java.util.EventObject): void {
+        let container = this.getControl("edit_expensedept") as FilterContainer;
+        container.addBeforeF7SelectListener(this);
     }
 
-    const orgId = this.getModel().getValue("org");
-    const projectId = this.getModel().getValue("project");
+    beforeF7Select(e: BeforeFilterF7SelectEvent): void {
 
-    e.addQFilter(new QFilter("useorg.id", "=", orgId));
+        if (e.getFieldName() !== "expensedept") {
+        return;
+        }
 
-    if (projectId != null) {
-      e.addQFilter(new QFilter("project.id", "=", projectId));
+        const orgId = this.getModel().getValue("org");
+        const projectId = this.getModel().getValue("project");
+
+        e.getQfilters().add(new QFilter("useorg.id", "=", orgId));
+
+        if (projectId != null) {
+        e.getQfilters().add(new QFilter("project.id", "=", projectId));
+        }
     }
-  }
 }
 
 let plugin = new ExpenseDeptFilterPlugin();

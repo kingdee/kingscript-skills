@@ -155,6 +155,7 @@
 - 不允许只看 TypeScript 声明就默认运行时一定可用
 - 不允许因为示例里出现过某个方法，就默认它已经被 SDK 声明层确认
 - 不允许只确认“这个方法 somewhere 存在”，却不确认“它是否属于当前变量类型或其声明继承链”
+- 不允许根据近似名字或主观补词编造 API；例如不能把 `addItemClickListeners` 写成 `addItemClickService`
 - 不允许把 A 事件参数、B 事件参数、`FormOperate`、`OperationContext` 等相邻对象的方法互相挪用
 - 不允许在生成代码时用 `any` 代替已知事件参数类型；如果声明层给出了 `BizDataEventArgs`、`BeforeDoOperationEventArgs`、`$.java.util.EventObject` 等类型，必须按当前版本声明使用
 - 不允许本地和在线来源冲突时擅自选一个而不说明
@@ -173,3 +174,24 @@
 - 已确认事实
 - 运行时边界
 - 待确认项
+
+## 反馈闭环
+
+当用户、编译器或运行时日志已经证明某段示例、模板或生成代码有问题时，处理不应停在“修当前答案”，还应继续做一层闭环判断：
+
+1. 这是单点笔误，还是一类会重复出现的生成风险
+2. 它应该沉淀到哪一层
+   - 平台入口约束：`codex/SKILL.md`、`qoder/SKILL.md`、`claude-code/SKILL.md`
+   - 检索与降级规则：`references/sdk/strategy.md`
+   - 事实说明：对应 `classes/`、`packages/`、`indexes/`
+   - 生成骨架：`references/templates/`
+   - 场景代码：`references/examples/`
+3. 如果已经能抽象成稳定规则，就应同步回写，不要只修一个示例文件
+
+优先需要沉淀成规则的典型问题包括：
+
+- 近似命名导致的伪 API
+- 方法确实存在，但不属于当前对象类型
+- 事件参数被错误写成 `any`
+- 本地编译器已证明的空值、返回值、宏常量约束
+- 同一场景在多个示例中反复出现的错误写法

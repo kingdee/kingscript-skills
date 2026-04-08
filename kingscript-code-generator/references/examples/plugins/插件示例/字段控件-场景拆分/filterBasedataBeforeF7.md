@@ -21,11 +21,12 @@
 
 ```typescript
 import { AbstractFormPlugin } from "@cosmic/bos-core/kd/bos/form/plugin";
-import { BasedataEdit } from "@cosmic/bos-core/kd/bos/form/control";
-import { BeforeF7SelectEvent } from "@cosmic/bos-core/kd/bos/form/field/events";
+import { BeforeF7SelectEvent, BeforeF7SelectListener } from "@cosmic/bos-core/kd/bos/form/field/events";
 import { QFilter } from "@cosmic/bos-core/kd/bos/orm/query";
+import { BasedataEdit } from "@cosmic/bos-core/kd/bos/form/field";
+import { ArrayList } from "@cosmic/bos-script/java/util";
 
-class BasedataFilterScenePlugin extends AbstractFormPlugin {
+class BasedataFilterScenePlugin extends AbstractFormPlugin implements BeforeF7SelectListener{
 
   initialize(): void {
     super.initialize();
@@ -46,19 +47,17 @@ class BasedataFilterScenePlugin extends AbstractFormPlugin {
   }
 
   beforeF7Select(e: BeforeF7SelectEvent): void {
-    super.beforeF7Select(e);
 
     if (e.getProperty().getName() !== "basedatafield1") {
       return;
     }
 
     let useOrg = this.getModel().getValue("useorg") as any;
-    let filters = [
-      new QFilter("forbidstatus", "=", "A")
-    ];
+    let filters = new ArrayList();
+    filters.add(new QFilter("forbidstatus", "=", "A"));
 
     if (useOrg != null) {
-      filters.push(new QFilter("useorg.id", "=", useOrg.get("id")));
+      filters.add(new QFilter("useorg.id", "=", useOrg.get("id")));
     }
 
     e.setCustomQFilters(filters);

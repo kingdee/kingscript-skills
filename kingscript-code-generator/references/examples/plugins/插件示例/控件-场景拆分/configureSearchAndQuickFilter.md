@@ -104,8 +104,8 @@ class ConfigureSearchAndQuickFilterPlugin extends AbstractFormPlugin {
     keyword: string
   ): void {
     let filters = [
-      new QFilter("number", QCP.like, "%" + keyword + "%")
-        .or(new QFilter("name", QCP.like, "%" + keyword + "%"))
+      new QFilter("number", "like", "%" + keyword + "%")
+        .or(new QFilter("name", "like", "%" + keyword + "%"))
     ];
 
     let rows = QueryServiceHelper.query(

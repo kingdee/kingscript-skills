@@ -178,6 +178,7 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 - 如果某个符号不需要 import，必须能明确说明它是运行时全局、当前文件局部定义，或由框架自动注入
 - 页面提示、通知、消息框相关方法，必须回到 `IFormView` 或本地声明层确认，不把示例里出现过的方法名直接当成可用 API
 - 调用 `obj.method()` 前，必须确认 `method` 属于 `obj` 当前类型或其声明继承链；不能只因为别的事件参数或上下文对象上有同名方法就直接套用
+- 不允许按“近似名字”猜方法；例如声明里是 `addItemClickListeners(...)`，就不能擅自写成 `addItemClickService(...)`
 - 生成代码时不得把事件参数写成 `any`；如果当前版本声明只给出 `BizDataEventArgs` 或 `$.java.util.EventObject`，也必须按声明原样写
 
 ### 解释 SDK 或 Java 映射
@@ -218,3 +219,4 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 - 不得假设 TypeScript 声明保证运行时可用
 - 不得忽略权限、租户隔离或生命周期时序
 - 如果信息缺失，提供有边界的假设方案，而不是虚假的确定答案
+- 当用户指出示例、模板或生成代码存在错误时，不能只修当前片段；必须继续判断这个问题是否应沉淀成可复用约束，并按影响范围回写到 `SKILL.md`、`references/sdk/strategy.md`、对应知识卡、索引、模板或示例入口，避免同类问题重复生成

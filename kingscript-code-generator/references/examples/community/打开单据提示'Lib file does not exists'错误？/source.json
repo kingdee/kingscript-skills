@@ -1,0 +1,18 @@
+{
+  "article_id": "787039850381264640",
+  "title": "打开单据提示\"Lib file does not exists\"错误？",
+  "source_url": "https://vip.kingdee.com/knowledge/787039850381264640?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L2 原文图片转写",
+    "L4 本地资料校对",
+    "L5 推断补全"
+  ],
+  "risk_level": "推断版，建议先验证",
+  "local_assets": [
+    "./images/image-01.png",
+    "./images/image-02.png"
+  ],
+  "notes": [
+    "这篇更适合作为“部署排障案例”收入 skill。"
+  ]
+}

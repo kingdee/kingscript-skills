@@ -25,7 +25,7 @@ class SetValueScenePlugin extends AbstractBillPlugIn {
 
   registerListener(e: $.java.util.EventObject): void {
     super.registerListener(e);
-    this.addClickListeners(["btn_fill_default"]);
+    this.addClickListeners("btn_fill_default");
   }
 
   click(e: $.java.util.EventObject): void {

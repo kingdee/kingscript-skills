@@ -1,0 +1,24 @@
+{
+  "article_id": "797425793713180672",
+  "title": "二开示例.单据转换下推实例",
+  "source_url": "https://vip.kingdee.com/knowledge/797425793713180672?specialId=570177930110532864&productLineId=40&isKnowledge=2&lang=zh-CN",
+  "source_levels": [
+    "L2 原文图片转写",
+    "L4 本地资料校对"
+  ],
+  "risk_level": "改字段标识后可用",
+  "local_assets": [
+    "./images/image-01.png",
+    "./images/image-02.png",
+    "./images/image-03.png",
+    "./images/image-04.png",
+    "./images/image-05.png",
+    "./images/image-06.png",
+    "./images/image-07.png",
+    "./images/image-08.png",
+    "./images/image-09.png"
+  ],
+  "notes": [
+    "本地 `afterDoOperation` 示例已覆盖 `ConvertServiceHelper.push(...)` 基本写法。"
+  ]
+}

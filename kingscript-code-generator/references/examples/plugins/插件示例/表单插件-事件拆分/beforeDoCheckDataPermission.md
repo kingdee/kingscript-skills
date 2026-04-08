@@ -12,29 +12,18 @@
 
 这个事件适合在权限校验前补充上下文、决定是否跳过某些临时场景，或者给权限服务附加识别信息。它不是通用的“绕过权限”入口，应谨慎使用。
 
-## 业务场景
-
-共享查询看板允许管理员切换查看组织数据。插件在校验前先写入当前选中组织，保证权限校验使用正确的组织上下文。
 
 ## 完整示例代码
 
 ```typescript
-import { AbstractFormPlugIn } from "@cosmic/bos-core/kd/bos/form/plugin";
+import { AbstractFormPlugin } from "@cosmic/bos-core/kd/bos/form/plugin";
 import { BeforeDoCheckDataPermissionArgs } from "@cosmic/bos-core/kd/bos/form/events";
 
-class PermissionPreparePlugin extends AbstractFormPlugIn {
+class PermissionPreparePlugin extends AbstractFormPlugin {
 
-  beforeDoCheckDataPermission(e: BeforeDoCheckDataPermissionArgs): void {
-    super.beforeDoCheckDataPermission(e);
-
-    const selectedOrg = this.getModel().getValue("fqueryorg");
-    const isAdminView = this.getModel().getValue("fisadminview") === true;
-
-    e.put("queryOrg", selectedOrg);
-
-    if (isAdminView) {
-      e.put("viewMode", "admin");
-    }
+  beforeCheckDataPermission(e: BeforeDoCheckDataPermissionArgs): void {
+    super.beforeCheckDataPermission(e);
+    e.setCancel(true);
   }
 }
 

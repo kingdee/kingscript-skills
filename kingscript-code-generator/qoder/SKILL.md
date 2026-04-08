@@ -118,7 +118,9 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 - 本地知识不够时，按 `indexes -> classes/packages -> manifests -> 外部知识盘(可选) -> 本地 .d.ts -> 在线 Javadoc` 降级。
 - 页面提示、通知、消息框相关方法，先回到 `IFormView` 或本地声明层确认，再决定是否可用。
 - 调用 `obj.method()` 前，必须确认 `method` 属于 `obj` 当前类型或其声明继承链，不能把别的事件参数或上下文对象的方法直接套过来。
+- 不允许按“近似名字”猜方法；例如声明里是 `addItemClickListeners(...)`，就不能擅自写成 `addItemClickService(...)`。
 - 生成代码时不得把事件参数写成 `any`；如果当前版本声明只给出 `BizDataEventArgs` 或 `$.java.util.EventObject`，也要按声明原样输出。
+- 当用户指出示例、模板或生成代码存在错误时，不能只修当前片段；还要判断这个问题是否应沉淀成可复用约束，并按影响范围回写到平台入口、策略、知识卡、索引、模板或示例入口，避免同类问题重复生成。
 
 ## 禁止事项
 

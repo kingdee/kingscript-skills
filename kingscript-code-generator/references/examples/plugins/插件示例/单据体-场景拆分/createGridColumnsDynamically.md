@@ -27,6 +27,8 @@
 ```typescript
 import { AbstractFormPlugin } from "@cosmic/bos-core/kd/bos/form/plugin";
 import { EntryGridBindDataEvent } from "@cosmic/bos-core/kd/bos/form/control/events";
+import { PropertyChangedArgs } from "@cosmic/bos-core/kd/bos/entity/datamodel/events";
+import { IClientViewProxy } from "@cosmic/bos-core/kd/bos/form";
 
 class CreateGridColumnsDynamicallyPlugin extends AbstractFormPlugin {
 
@@ -42,7 +44,7 @@ class CreateGridColumnsDynamicallyPlugin extends AbstractFormPlugin {
     this.rebuildGridCols();
   }
 
-  propertyChanged(e: $.kd.bos.dataentity.event.PropertyChangedArgs): void {
+  propertyChanged(e: PropertyChangedArgs): void {
     super.propertyChanged(e);
 
     if (e.getProperty().getName() === "gridcols") {
@@ -54,16 +56,16 @@ class CreateGridColumnsDynamicallyPlugin extends AbstractFormPlugin {
     let grid = this.getView().getControl("entryentity") as any;
     let pageIndex = grid.getEntryState().getCurrentPageIndex();
     let colCount = this.readColumnCount();
-    e.setData(this.createGridPageData(pageIndex, colCount));
+    e.getData().putAll(this.createGridPageData(pageIndex, colCount));
   }
 
   private rebuildGridCols(): void {
     let colCount = this.readColumnCount();
     let gridColumns = this.createGridColumns(colCount);
-    let clientViewProxy = (this.getView() as any).getService($.kd.bos.mvc.client.IClientViewProxy);
+    let clientViewProxy = (this.getView() as any).getService(IClientViewProxy);
 
     clientViewProxy.preInvokeControlMethod("entryentity", "createGridColumns", [gridColumns]);
-    this.getModel().setEntryProperty(
+    clientViewProxy.setEntryProperty(
       "entryentity",
       "data",
       this.createGridPageData(1, colCount)
