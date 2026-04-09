@@ -49,6 +49,11 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 - `<references_root>\docs\README.md`
 - `<references_root>\docs\custom-development\README.md`
 - `<references_root>\docs\custom-development\脚本控制器开发指南.md`
+- `<references_root>\docs\custom-development\controller-safe-template.md`
+- `<references_root>\docs\custom-development\runtime-bigdecimal.md`
+- `<references_root>\docs\custom-development\runtime-date-bridge.md`
+- `<references_root>\docs\custom-development\runtime-dynamicobject.md`
+- `<references_root>\docs\custom-development\faq-runtime-pitfalls.md`
 - `<examples_root>\README.md`
 - `<examples_root>\plugins\README.md`
 - `<templates_root>\README.md`
@@ -64,11 +69,15 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 ## 推荐检索顺序
 
 1. 先解析 `references_root / docs_root / examples_root / sdk_root / templates_root / language_root`
-2. 用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API` 时，先看：`<references_root>\docs\custom-development\脚本控制器开发指南.md`
+2. 用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API` 时，先看：`<references_root>\docs\custom-development\脚本控制器开发指南.md` + `<references_root>\docs\custom-development\controller-safe-template.md`
 3. 先看最接近的代码示例：`<examples_root>`
 4. 需要起手骨架时看：`<templates_root>\README.md`
 5. 涉及 SDK 语义时看：`<sdk_root>\README.md`、`<sdk_root>\indexes\`
-6. 涉及语法、关键字和命名规则时看：`<language_root>\README.md`
+6. 涉及金额/数值字段时补读：`<references_root>\docs\custom-development\runtime-bigdecimal.md`
+7. 涉及日期过滤或 QFilter 日期入参时补读：`<references_root>\docs\custom-development\runtime-date-bridge.md`
+8. 涉及 `QueryServiceHelper.query` 或 `DynamicObject` 读取时补读：`<references_root>\docs\custom-development\runtime-dynamicobject.md`
+9. 排查运行时异常时补读：`<references_root>\docs\custom-development\faq-runtime-pitfalls.md`
+10. 涉及语法、关键字和命名规则时看：`<language_root>\README.md`
 
 ## 降级查找顺序
 
@@ -99,12 +108,53 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 ## Qoder 下的任务路由
 
 - 用户问“这段代码怎么写”：先去 `<examples_root>`
-- 用户问“KWC controller / 脚本控制器怎么配、怎么写、怎么部署”：先去 `<references_root>\docs\custom-development\脚本控制器开发指南.md`
+- 用户问“KWC controller / 脚本控制器怎么配、怎么写、怎么部署”：先去 `<references_root>\docs\custom-development\脚本控制器开发指南.md` 和 `<references_root>\docs\custom-development\controller-safe-template.md`
 - 用户问“这个类/事件是什么”：先去 `<sdk_root>\classes\` 或 `<sdk_root>\packages\`
 - 用户问“我该从哪个插件起手”：先去 `<templates_root>`
 - 用户贴错误或异常：先去 `<sdk_root>\indexes\error-index.md`
 - 仓库内资料不足且本地挂载了外部知识盘时：按 `<sdk_root>\strategy.md` 进入外部扩展层，先读 `*-description.md`，需要代码和坑点时再读 `*-example.md`
 - 如果 `local-paths.json` 中配置了 `bos_docs_path`，把它视为外部知识盘主入口；只有仓库内资料不足时才进入
+
+## 运行时兼容性硬约束（P0，KWC/Controller）
+
+脚本控制器代码默认遵循“运行时稳定优先”，而不是“语法现代优先”。
+
+除非项目内已有可运行示例明确验证，否则默认强制以下约束：
+
+1. 禁止默认使用高风险现代语法
+   - 禁用 optional chaining：`?.`
+   - 禁用 nullish coalescing：`??`
+   - 禁用深层对象解构
+   - 禁止对 Java 返回对象直接做链式 JS 调用
+2. 禁止把 Java 数值对象当原生 JS number 直接处理
+   - 禁用 `Number(value)`、`Number.isFinite(value)`、`value.toFixed(...)`
+   - 禁用 `value + 1` 这类隐式数值运算
+   - 保守转换：先 `${value}`，再 `parseFloat(...)`，再 `isNaN(...)` 兜底
+3. 日期字段禁止默认按 JS Date 完整等价处理
+   - 不默认假设 Java Date 与 JS `Date` 完全等价
+   - 避免复杂日期运算（时区、`setHours`、叠加偏移）
+4. DynamicObject 读取强约束
+   - 统一使用 `row.get('fieldKey')`
+   - 禁止 `row?.get?.(...)`
+   - 先取值，再显式转换（字符串/数值）
+5. 响应数据强约束
+   - 顶层响应必须是对象
+   - 不允许顶层直接返回数组
+6. adapterApi 运行时兜底检查
+   - 必须检查 `config.app` 与 `config.isvId` 在运行时可用
+7. KS static 限制（新增强约束）
+   - KS 代码中禁止定义 `static` 方法
+   - KS 代码中禁止定义 `static` 变量（含类静态字段、`static readonly`）
+
+## 输出前检查清单（KWC/Controller）
+
+- [ ] 是否出现 `?.` 或 `??`？如有，必须移除或给出已验证运行时依据
+- [ ] 是否对金额/数值字段直接使用 `Number()/toFixed()/Number.isFinite()`？
+- [ ] 是否对 Java Date 做了复杂 JS 日期运算？
+- [ ] 是否统一使用 `row.get('fieldKey')` 读取查询结果？
+- [ ] 是否将顶层响应包装为对象？
+- [ ] adapterApi 场景下是否确认 `config.app` / `config.isvId` 非空？
+- [ ] 是否定义了 `static` 方法或 `static` 变量？
 
 ## 输出规则
 
@@ -120,6 +170,7 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 - 调用 `obj.method()` 前，必须确认 `method` 属于 `obj` 当前类型或其声明继承链，不能把别的事件参数或上下文对象的方法直接套过来。
 - 不允许按“近似名字”猜方法；例如声明里是 `addItemClickListeners(...)`，就不能擅自写成 `addItemClickService(...)`。
 - 生成代码时不得把事件参数写成 `any`；如果当前版本声明只给出 `BizDataEventArgs` 或 `$.java.util.EventObject`，也要按声明原样输出。
+- 不得定义 `static` 方法或 `static` 变量（含类静态字段、`static readonly`）。
 - 当用户指出示例、模板或生成代码存在错误时，不能只修当前片段；还要判断这个问题是否应沉淀成可复用约束，并按影响范围回写到平台入口、策略、知识卡、索引、模板或示例入口，避免同类问题重复生成。
 
 ## 禁止事项
@@ -127,3 +178,4 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 - 不编造 Kingscript API、事件名或上下文对象。
 - 不默认假设 Java 开放能力一定可用。
 - 不忽略权限、组织、租户、账套和生命周期边界。
+- 不定义 `static` 方法或 `static` 变量（含类静态字段、`static readonly`）。

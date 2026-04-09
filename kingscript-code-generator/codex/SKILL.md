@@ -74,6 +74,11 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 - `<references_root>\docs\README.md`
 - `<references_root>\docs\custom-development\README.md`
 - `<references_root>\docs\custom-development\脚本控制器开发指南.md`
+- `<references_root>\docs\custom-development\controller-safe-template.md`
+- `<references_root>\docs\custom-development\runtime-bigdecimal.md`
+- `<references_root>\docs\custom-development\runtime-date-bridge.md`
+- `<references_root>\docs\custom-development\runtime-dynamicobject.md`
+- `<references_root>\docs\custom-development\faq-runtime-pitfalls.md`
 
 ### templates
 
@@ -97,7 +102,7 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 
 1. 先解析 `references_root / docs_root / examples_root / sdk_root / templates_root / language_root`
 2. 再找 `<examples_root>` 中最接近的示例
-3. 如果用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API`，先读 `<references_root>\docs\custom-development\脚本控制器开发指南.md`
+3. 如果用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API`，先读 `<references_root>\docs\custom-development\脚本控制器开发指南.md` 和 `<references_root>\docs\custom-development\controller-safe-template.md`；涉及金额/日期/DynamicObject 时分别补读对应 `runtime-*.md`
 4. 如果需要插件骨架或占位代码，读 `<templates_root>\README.md`
 5. 如果涉及 SDK，先读 `<sdk_root>\README.md`、`strategy.md` 和 `indexes\`
 6. 如果涉及语法、关键字或语言限制，读 `<language_root>\README.md`
@@ -169,7 +174,10 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 
 ### 生成或修改代码
 
-- 如果目标是 KWC 脚本控制器，先读 `<references_root>\docs\custom-development\脚本控制器开发指南.md`
+- 如果目标是 KWC 脚本控制器，先读 `<references_root>\docs\custom-development\脚本控制器开发指南.md` 与 `<references_root>\docs\custom-development\controller-safe-template.md`
+- 如果涉及金额/数值字段，补读 `<references_root>\docs\custom-development\runtime-bigdecimal.md`
+- 如果涉及日期过滤或 QFilter 日期入参，补读 `<references_root>\docs\custom-development\runtime-date-bridge.md`
+- 如果涉及 `QueryServiceHelper.query` 或 `DynamicObject` 字段读取，补读 `<references_root>\docs\custom-development\runtime-dynamicobject.md`
 - 先读 `<templates_root>\`
 - 再读 `<examples_root>\` 中最相关的示例
 - 生成代码时优先复用已有插件模板和事件写法
@@ -203,6 +211,60 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 - 再核对 `<sdk_root>\` 中的类、方法和生命周期说明
 - 最后核对 `<language_root>\README.md` 及相关语法条目
 
+## 运行时兼容性硬约束（P0，KWC/Controller）
+
+脚本控制器代码默认遵循“运行时稳定优先”，而不是“语法现代优先”。
+
+除非项目内已有可运行示例明确验证，否则默认强制以下约束：
+
+1. 禁止默认使用高风险现代语法
+   - 禁用 optional chaining：`?.`
+   - 禁用 nullish coalescing：`??`
+   - 禁用深层对象解构
+   - 禁止对 Java 返回对象直接做链式 JS 调用
+   - 禁止依赖现代浏览器/Node 运行时特性的全局 API 写法
+2. 禁止把 Java 数值对象当原生 JS number 直接处理
+   - 禁用 `Number(value)`、`Number.isFinite(value)`、`value.toFixed(...)`
+   - 禁用 `value + 1` 这类隐式数值运算
+   - 仅做轻量聚合/展示时，使用保守转换：先 `${value}`，再 `parseFloat(...)`，再 `isNaN(...)` 兜底
+3. 日期字段禁止默认按 JS Date 完整等价处理
+   - 不默认假设 Java Date 与 JS `Date` 完全等价
+   - 避免复杂日期运算（时区、`setHours`、叠加偏移）
+   - 无成熟模板时，优先“宽查询 + 脚本内格式化聚合”
+4. DynamicObject 读取强约束
+   - 统一使用 `row.get('fieldKey')`
+   - 禁止 `row?.get?.(...)`
+   - 禁止对 `row.get(...)` 返回值直接做复杂链式处理
+   - 先取值，再显式转换（字符串/数值）
+5. 响应数据强约束
+   - 顶层响应必须是对象
+   - 不允许顶层直接返回数组
+   - 列表字段默认返回 JSON 字符串（如 `itemsJson` / `trendJson` / `statusCountsJson`），前端自行 `JSON.parse`
+6. adapterApi 运行时兜底检查
+   - 若前端通过 adapterApi 调用，必须检查 `config.app` 与 `config.isvId` 在运行时可用
+7. KS static 限制（新增强约束）
+   - KS 代码中禁止定义 `static` 方法
+   - KS 代码中禁止定义 `static` 变量（含类静态字段、`static readonly`）
+
+## 生成策略（KWC/Controller）
+
+当存在多种写法时，按以下优先级选择：
+
+1. 已有项目/示例明确验证可运行的写法
+2. 保守 ES 子集写法（以运行时稳定为第一目标）
+3. Java 对象桥接风险更低的写法
+4. 可读性更高但运行时风险未知的现代语法（默认降级不用）
+
+## 输出前检查清单（KWC/Controller）
+
+- [ ] 是否出现 `?.` 或 `??`？如有，必须移除或明确给出已验证运行时依据
+- [ ] 是否对金额/数值字段直接使用 `Number()/toFixed()/Number.isFinite()`？如有，必须改为保守转换
+- [ ] 是否对 Java Date 使用了复杂 JS 日期运算？如有，必须说明风险并改为更稳方案
+- [ ] 是否对 QueryServiceHelper.query / DynamicObject 结果统一使用 `row.get('fieldKey')` 读取？
+- [ ] 是否将顶层响应包装为对象，而非直接返回数组？
+- [ ] 若前端走 adapterApi，是否已确认 `config.app` / `config.isvId` 运行时非空？
+- [ ] 是否定义了 `static` 方法或 `static` 变量？如有，必须删除并改为实例级实现
+
 ## 输出约定
 
 默认采用结构化回答，包含：
@@ -218,5 +280,6 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 - 不得编造 Kingscript API、事件名或上下文对象结构
 - 不得假设 TypeScript 声明保证运行时可用
 - 不得忽略权限、租户隔离或生命周期时序
+- 不得定义 `static` 方法或 `static` 变量（含类静态字段、`static readonly`）
 - 如果信息缺失，提供有边界的假设方案，而不是虚假的确定答案
 - 当用户指出示例、模板或生成代码存在错误时，不能只修当前片段；必须继续判断这个问题是否应沉淀成可复用约束，并按影响范围回写到 `SKILL.md`、`references/sdk/strategy.md`、对应知识卡、索引、模板或示例入口，避免同类问题重复生成
