@@ -19,6 +19,10 @@
 - `runtime-bigdecimal.md`
   - BigDecimal/金额字段运行时处理约束
   - 约束 `Number()/toFixed()/Number.isFinite()` 禁用与安全替代写法
+- `runtime-bigint.md`
+  - BigInt/Long 类型 ID 运行时处理约束
+  - 约束大整数精度丢失风险与 `BigInt()` 包装规范
+  - 覆盖 QFilter 查询、DynamicObject 读取、BigInt 运算规则
 - `runtime-date-bridge.md`
   - Java Date 与 JS Date 桥接风险说明
   - 约束日期运算与 QFilter 日期入参的保守处理方式
@@ -27,7 +31,7 @@
   - 约束 `row.get('fieldKey')` 的标准读取姿势和后置转换顺序
 - `faq-runtime-pitfalls.md`
   - 常见运行时坑位 FAQ（症状、原因、错误写法、正确写法）
-  - 重点覆盖 optional chaining、BigDecimal、顶层数组响应、adapterApi 配置、QFilter 日期问题、`static` 禁用
+  - 覆盖：optional chaining、BigDecimal、顶层数组响应、adapterApi 配置、QFilter 日期问题、`static` 禁用、JS 原生数据结构序列化、`entryentity.` 前缀、`query` 参数签名、`row.getDate()` 不可捕获异常、字段名校验、`for-of` 禁止、Java 异常 `.message` 不可靠
 
 ## 使用建议
 
