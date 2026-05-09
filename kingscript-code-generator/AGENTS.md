@@ -2,10 +2,10 @@
 
 当任务与 Kingscript 二开有关时，优先读取：
 
-1. `../references/examples/` 中最相关的示例
-2. `../references/templates/README.md`
-3. 如果涉及 SDK，再读 `../references/sdk/README.md`、`../references/sdk/strategy.md` 和 `../references/sdk/indexes/`
-4. 如果涉及语法或关键字，再读 `../references/language/kingscript/README.md`
+1. `./references/examples/` 中最相关的示例
+2. `./references/templates/README.md`
+3. 如果涉及 SDK，再读 `./references/sdk/README.md`、`./references/sdk/strategy.md` 和 `./references/sdk/indexes/`
+4. 如果涉及语法或关键字，再读 `./references/language/README.md`
 
 ## 回答要求
 

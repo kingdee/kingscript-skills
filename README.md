@@ -23,9 +23,9 @@ kingscript-skills/
 
 每个 skill 子目录内部再自行维护：
 
-- 平台入口，如 `codex/`、`qoder/`、`claude-code/`
-- 共享参考资料，如 `references/`
-- 安装脚本、平台说明和本地配置样例
+- 通用 skill 定义（`SKILL.md`）与各 Agent 入口文件（`CLAUDE.md`、`AGENTS.md`）
+- 共享参考资料（`references/`）
+- 安装脚本
 
 ## 使用建议
 
