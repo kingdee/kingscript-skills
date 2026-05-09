@@ -33,5 +33,5 @@
 ## 使用建议
 
 - 已知模块时，从本文件开始。
-- 进入模块后，再去 `package-index.md` 找包。
-- 如果只知道类名或关键词，改走 `class-index.md` 或 `keyword-index.md`。
+- 进入模块后，再去 `keyword-index.md` / `scenario-index.md` 或 `../classes/<ClassName>.md` 找具体类。
+- 如果只知道类名，先查 `../classes/<ClassName>.md`；无卡片时回退本地 `.d.ts`。

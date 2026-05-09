@@ -1,26 +1,17 @@
-# SDK Microservice Index
+# SDK 微服务索引
 
-这个索引用于回答:
-
-- 某个能力是否属于微服务入口
-- 先按微服务定位，再继续追到模块、包或类时该去哪
+用于回答"某个能力是否属于微服务入口""先按微服务定位，下一步去哪"。
 
 ## 当前状态
 
-当前 skill 里还没有沉淀具体微服务卡片，所以这里先提供检索路由，不留空壳。
+本 skill 聚焦 KWC 脚本控制器后端 API + 数据 CRUD，尚未沉淀微服务调用知识卡。本文件先作为检索路由保留。
 
 ## 推荐检索顺序
 
-1. 先看 [module-index.md](module-index.md) 缩小产品域
-2. 再看 [package-index.md](package-index.md) 和 `microservices/README.md`
-3. 如果仍然没有命中，再回退到本地声明和在线 Javadoc
+1. 先看 [module-index.md](module-index.md) 缩小产品域。
+2. 再看 [keyword-index.md](keyword-index.md) · [scenario-index.md](scenario-index.md) 或 `../classes/<ClassName>.md` 找具体类和方法。
+3. 仍未命中时，回退到本地 `.d.ts` 声明和在线 Javadoc。
 
-## 后续优先补充方向
+## 条目建议格式
 
-- 服务职责
-- 典型调用场景
-- 模块和包的对应关系
-- 微服务入口与插件扩展点的联系
-- 常见边界和调用限制
-
-如果短期内还没有稳定的微服务资料，保留这个文件比删除更好，因为它仍然承担“告诉模型下一步去哪找”的职责。
+补条目时建议包含：服务职责、典型调用场景、模块和包的对应关系、常见边界和调用限制。

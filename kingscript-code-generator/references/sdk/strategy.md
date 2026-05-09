@@ -1,197 +1,96 @@
 # SDK 检索策略
 
-本文件用于定义 Kingscript skill 的全量 SDK 检索降级链路。
-
-## 大文件警告
-
-- `references/sdk/manifests/` 下的结构化清单文件体积可能较大，只适合按需查询，不适合整体加载。
-- `references/sdk/manifests/methods.json` 为全量方法级兜底清单，优先用于“已通过索引缩小范围后的精确定位”。
-- 处理 SDK 问题时，先走 `classes/`、`indexes/`，只有在索引不足时再按需读取清单文件。
-- 为了适合 GitHub 仓库发布，`methods.json` 不作为仓库默认提交内容；仓库版优先依赖可读索引和轻量清单。
+定义本 skill 的 SDK 检索降级链路，聚焦 KWC 脚本控制器后端 API + 数据 CRUD。
 
 ## 目标
 
-- 高频类优先命中知识卡
-- 长尾类依然能通过本地声明和在线文档兜底
-- 在缺少知识卡时，模型仍然能稳定定位模块、包、类、方法和来源
-- 明确“何时继续降级，何时停止并声明假设”
+- 高频类优先命中知识卡。
+- 长尾类通过本地 `.d.ts` 和在线 Javadoc 兜底。
+- 明确"何时继续降级，何时停止并声明假设"。
 
-## 标准降级链路
+## 降级链路
 
-### 第 1 层：知识卡层
+### 第 1 层：知识卡
 
-优先读取：
+- `references/sdk/classes/<ClassName>.md` — 27 个核心类（数据访问、元数据、基础资料/弹性域、运行时上下文等）
+- Java ↔ KingScript 类型桥接细节走 `../backend/runtime-number-bridge.md` / `runtime-date-bridge.md` / `runtime-dynamicobject.md`
 
-- `references/sdk/classes/`
-- `references/sdk/packages/`
-- `references/sdk/plugins/`
-- `references/sdk/microservices/`
+适用：已知类名且已有知识卡 / 高频类 / 需要用途 + 场景 + 风险 + FAQ。
 
-适用场景：
+### 第 2 层：索引
 
-- 已知类名且已有知识卡
-- 高频类、高风险类、常见扩展点
-- 需要快速获得“用途 + 场景 + 风险 + FAQ + 示例”
+未命中知识卡时按问题类型进入：
 
-### 第 2 层：索引层
+- 方法名 → `indexes/methods-hot.md`
+- 模块 → `indexes/module-index.md`
+- 业务场景 → `indexes/scenario-index.md`
+- 关键词 / 口语 → `indexes/keyword-index.md`
+- 报错 → `indexes/error-index.md`（配合 `../backend/faq-runtime-pitfalls.md`）
+- 废弃 → `indexes/deprecated-index.md`
+- 微服务 → `indexes/microservice-index.md`
 
-如果没有命中知识卡，按问题类型进入索引：
+适用：需要先定位类/包/模块；用户说法与 SDK 正式名称不一致；还没有对应知识卡。
 
-- 类名问题 -> `references/sdk/indexes/class-index.md`
-- 包或模块问题 -> `references/sdk/indexes/package-index.md`、`references/sdk/indexes/module-index.md`
-- 场景问题 -> `references/sdk/indexes/scenario-index.md`
-- 关键词问题 -> `references/sdk/indexes/keyword-index.md`
-- 报错问题 -> `references/sdk/indexes/error-index.md`
-- 插件或扩展点问题 -> `references/sdk/indexes/plugin-index.md`
-- 微服务问题 -> `references/sdk/indexes/microservice-index.md`
-- 方法问题 -> `references/sdk/indexes/method-index.md`
+### 第 3 层：模块统计
 
-适用场景：
+索引仍不足以回答细节时，读取结构化清单：
 
-- 需要先定位类、包、模块
-- 用户说法与 SDK 正式名称不一致
-- 还没有对应知识卡
+- `manifests/summary.json` — 整体统计
+- `manifests/modules.json` — 21 个业务域模块统计（识别 `@constellation/*` / `@cosmic/*` 归属）
 
-### 第 3 层：清单层
+适用：识别陌生类型属于哪个业务域 / 模块是否在 SDK 范围内。
 
-如果索引不足以回答细节，再读取结构化清单：
+### 第 4 层：本地声明（.d.ts）
 
-- `references/sdk/manifests/summary.json`
-- `references/sdk/manifests/modules.json`
-- `references/sdk/manifests/packages.json`
-- `references/sdk/manifests/types.json`
-- `references/sdk/manifests/const-exports.json`
-- `references/sdk/manifests/namespaces.json`
-- `references/sdk/manifests/methods.json`（如本地或发布资产中存在）
+清单无法解释语义或需要更细签名时，读取本地 `@cosmic/bos-core`、`@cosmic/bos-script` 的 `.d.ts`。
 
-适用场景：
+- 优先打开单个命中的 `.d.ts`，不整目录扫描。
+- 只读取与目标类 / 包 / 方法直接相关的文件。
 
-- 需要全量定位
-- 需要确认导出名、namespace、模块归属
-- 需要确认方法名、签名、参数和返回值结构
-- 需要做长尾 SDK 兜底检索
+### 第 5 层：在线 Javadoc
 
-补充说明：
+本地声明只有结构、没有语义说明时，读取 [Cosmic V8.0.1 Javadoc](https://dev.kingdee.com/sdk/Cosmic%20V8.0.1/index.html?nav=class)。
 
-- GitHub 仓库版默认不依赖 `methods.json` 才能工作。
-- 如果 `methods.json` 缺失，则方法级问题优先使用：
-  - `references/sdk/indexes/method-index.md`
-  - `references/sdk/indexes/methods-by-name.md`
-  - `references/sdk/indexes/methods-hot.md`
-  - `references/sdk/indexes/methods-lifecycle.md`
-  然后再继续降级到本地声明层。
+适用：需要参数 / 返回值语义、版本信息、废弃说明；本地 `.d.ts` 注释不足。
 
-### 第 4 层：外部挂载知识盘（可选扩展层）
+### 第 6 层：有界回答
 
-如果仓库内知识卡、索引和清单仍不足以回答问题，而维护者本地额外挂载了 SDK 文档包或反编译知识库，可以按需进入外部知识盘。
+以上各层仍不能确认时：
 
-推荐入口：
-
-- 环境变量 `BOS_DOCS_PATH`
-- 当前工作区中由维护者自行挂载、但不提交到仓库的文档目录
-- 仓库根目录提供的离线资料包 `sdks.zip`（需先自行解压，再把解压目录配置到 `BOS_DOCS_PATH` 或 `bos_docs_path`）
-
-读取原则：
-
-- 优先模糊定位最相关的 `*-description.md`
-- 先读 `*-description.md` 了解 API、用途、参数和方法结构
-- 只有当问题需要真实写法、运行时边界、联动代码或常见坑时，再继续读取配套的 `*-example.md`
-- 不整盘通读，不把外部知识盘当成默认入口
-
-适用场景：
-
-- 长尾 SDK 类型在仓库内尚未沉淀知识卡
-- 需要反编译级方法清单或真实业务示例
-- 需要比 `.d.ts` 更接近运行时的经验性资料
-
-### 第 5 层：本地声明层
-
-如果清单无法解释语义或需要更细的签名信息，读取本地声明文件。
-
-当前本地兜底路径：
-
-- `<YOUR_LOCAL_NODE_MODULES>`（本地 Kingscript 项目的 node_modules 目录）
-
-读取原则：
-
-- 优先打开命中的单个 `.d.ts` 文件
-- 不整目录扫描，不整模块通读
-- 只读取与目标类、包、方法直接相关的文件
-
-### 第 6 层：在线 Javadoc 层
-
-如果本地声明只能提供结构，无法解释语义、参数含义、返回值说明、废弃信息，再读取在线 Javadoc。
-
-当前在线兜底入口：
-
-- [Cosmic V8.0.1 Javadoc](https://dev.kingdee.com/sdk/Cosmic%20V8.0.1/index.html?nav=class)
-
-适用场景：
-
-- 需要参数语义、返回值语义、版本信息、废弃说明
-- 本地 `.d.ts` 中没有足够注释
-
-### 第 7 层：有界回答层
-
-如果以上各层仍不能确认答案：
-
-- 明确说明查到了什么
-- 明确说明缺什么
-- 明确说明哪些是推断
+- 明确说明查到了什么 / 缺什么 / 哪些是推断
 - 提供有界方案，不编造 SDK 内容
 
 ## 检索停止条件
 
-满足以下任意条件即可停止继续降级：
+满足任意一条即可停止继续降级：
 
-- 已经能确认类、场景、边界、风险
-- 已经能给出足够可信的结构化回答
-- 再继续读取只会增加噪音，不会显著提高确定性
+- 已能确认类 / 场景 / 边界 / 风险
+- 已能给出足够可信的结构化回答
+- 再继续读取只会增加噪音、不会显著提高确定性
 
 ## 不允许的行为
 
-- 不允许直接跳过索引层去整目录扫 `node_modules`
-- 不允许把外部知识盘整目录扫读并替代仓库内索引层
-- 不允许只看 TypeScript 声明就默认运行时一定可用
-- 不允许因为示例里出现过某个方法，就默认它已经被 SDK 声明层确认
-- 不允许只确认“这个方法 somewhere 存在”，却不确认“它是否属于当前变量类型或其声明继承链”
-- 不允许根据近似名字或主观补词编造 API；例如不能把 `addItemClickListeners` 写成 `addItemClickService`
-- 不允许把 A 事件参数、B 事件参数、`FormOperate`、`OperationContext` 等相邻对象的方法互相挪用
-- 不允许在生成代码时用 `any` 代替已知事件参数类型；如果声明层给出了 `BizDataEventArgs`、`BeforeDoOperationEventArgs`、`$.java.util.EventObject` 等类型，必须按当前版本声明使用
-- 不允许本地和在线来源冲突时擅自选一个而不说明
+- 跳过索引层直接整目录扫 `node_modules`
+- 只看 TypeScript 声明就默认运行时一定可用
+- 只确认方法名存在，不确认它属于当前变量类型或其继承链
+- 根据近似命名编造 API（例：把 `queryOne` 写成 `queryFirst`）
+- 把 A 事件参数、B 事件参数的方法互相挪用
+- 在生成代码里用 `any` 代替声明层给出的具体类型
+- 本地和在线来源冲突时擅自选一个而不说明
 
 ## 输出要求
 
-涉及 SDK 解释时，回答至少应说明：
-
-- 当前命中的类或方法
-- 来源层级
-  - 知识卡
-  - 索引
-  - 清单
-  - 本地声明
-  - 在线 Javadoc
-- 已确认事实
-- 运行时边界
-- 待确认项
+涉及 SDK 解释时至少说明：命中的类或方法 · 来源层级（知识卡 / 索引 / 清单 / 本地声明 / 在线 Javadoc）· 已确认事实 · 运行时边界 · 待确认项。
 
 ## 反馈闭环
 
-当用户、编译器或运行时日志已经证明某段示例、模板或生成代码有问题时，处理不应停在“修当前答案”，还应继续做一层闭环判断：
+当用户或运行时日志证明某段代码有问题时，不只修当前片段，还要判断：
 
-1. 这是单点笔误，还是一类会重复出现的生成风险
-2. 它应该沉淀到哪一层
-   - 平台入口约束：`codex/SKILL.md`、`qoder/SKILL.md`、`claude-code/SKILL.md`
-   - 检索与降级规则：`references/sdk/strategy.md`
-   - 事实说明：对应 `classes/`、`packages/`、`indexes/`
-   - 生成骨架：`references/templates/`
-   - 场景代码：`references/examples/`
-3. 如果已经能抽象成稳定规则，就应同步回写，不要只修一个示例文件
+1. 这是单点笔误还是一类会重复出现的生成风险？
+2. 如能抽象成稳定规则，就同步回写到：
+   - 入口约束：`SKILL.md`
+   - 检索规则：`sdk/strategy.md`（本文件）
+   - 事实说明：对应 `sdk/classes/` / `sdk/indexes/`
+   - 运行时规则：`backend/faq-runtime-pitfalls.md` 顶部 P0 总表
 
-优先需要沉淀成规则的典型问题包括：
-
-- 近似命名导致的伪 API
-- 方法确实存在，但不属于当前对象类型
-- 事件参数被错误写成 `any`
-- 本地编译器已证明的空值、返回值、宏常量约束
-- 同一场景在多个示例中反复出现的错误写法
+优先沉淀的典型问题：近似命名伪 API · 方法不属于当前对象类型 · 事件参数被写成 `any` · BigDecimal / 大整数 / Java Date 桥接错误 · 响应体未用 `toJavaSafe` 转换。
