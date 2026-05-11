@@ -23,7 +23,7 @@ rsync -a --exclude='.git' --exclude='install.ps1' --exclude='install.sh' "$SCRIP
 
 # --- 验证 ---
 missing=()
-for entry in references SKILL.md CLAUDE.md AGENTS.md; do
+for entry in references SKILL.md; do
   if [ ! -e "$TARGET_DIR/$entry" ]; then
     missing+=("$entry")
   fi

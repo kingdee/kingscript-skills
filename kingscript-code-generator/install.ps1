@@ -26,7 +26,7 @@ Get-ChildItem -Path $ScriptRoot -Exclude @(".git", "install.ps1", "install.sh") 
     Copy-Item -Destination $TargetDir -Recurse -Force
 
 # --- 验证 ---
-$required = @("references", "SKILL.md", "CLAUDE.md", "AGENTS.md")
+$required = @("references", "SKILL.md")
 $missing = @()
 foreach ($entry in $required) {
     if (-not (Test-Path (Join-Path $TargetDir $entry))) {

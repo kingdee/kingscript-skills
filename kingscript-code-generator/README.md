@@ -4,13 +4,7 @@ Kingscript 二开 AI skill，用于脚本生成/修改、SDK 声明解释、Java
 
 ## 安装
 
-将本目录整体复制到目标 Agent 的 skills 目录下即可。各 Agent 会自动识别各自的入口文件：
-
-| Agent | 入口文件 |
-|-------|---------|
-| Claude Code | `CLAUDE.md` |
-| Codex | `AGENTS.md` |
-| Qoder | `SKILL.md` |
+将本目录整体复制到目标 Agent 的 skills 目录下即可。入口文件为 `SKILL.md`，兼容 Claude Code、Codex 和 Qoder。
 
 也可以使用安装脚本（默认安装到 `~/.qoder/skills/`，支持 `-TargetDir` 指定路径）：
 
@@ -28,11 +22,14 @@ bash install.sh
 
 ```
 references/
-├── docs/                        ← 脚本控制器、运行时约束文档
-├── examples/                    ← 社区示例与插件示例
+├── language/                    ← 语法规范与关键字
 ├── sdk/                         ← SDK 索引、声明、类/包/插件文档
-├── templates/                   ← 各类插件起手模板
-└── language/                    ← 语法规范与关键字
+├── gotchas/                     ← 公共注意事项与经验（运行时约束、常见问题）
+├── docs/                        ← 各开发类型专属指南
+├── templates/                   ← 各开发类型起手模板
+└── examples/                    ← 示例
+    ├── plugins/                 ← 插件示例
+    └── community/               ← 社区综合示例
 ```
 
 详细检索顺序和约束见 `SKILL.md`。

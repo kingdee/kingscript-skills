@@ -25,7 +25,7 @@ const dateStr = row.get('bizdate');
 const text = dateStr === null || dateStr === undefined ? '' : `${dateStr}`;
 ```
 
-详见 `runtime-date-bridge.md` 和 `faq-runtime-pitfalls.md` 坑 11。
+详见 `date.md` 和 `README.md` 坑 11。
 
 ## 字段名校验原则
 

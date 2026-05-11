@@ -103,7 +103,7 @@ const year = match ? match[1] : '';
 const month = match ? match[2] : '';
 ```
 
-详见 `faq-runtime-pitfalls.md` 坑 11。
+详见 `README.md` 坑 14。
 
 ## 输出前自检
 
@@ -111,5 +111,5 @@ const month = match ? match[2] : '';
 - 是否按 JS 0~6 范围使用了 `getDay()` 返回值？（KingScript 实际返回 1~7，周日=1）
 - 是否把 Java Date 当作 JS Date 做了复杂运算？
 - 是否对时区和格式化做了未经验证的假设？
-- 是否可以用“宽查询 + 脚本内聚合”替代复杂过滤？
+- 是否可以用"宽查询 + 脚本内聚合"替代复杂过滤？
 - 是否避免了 `row.getDate()` 而改用 `row.get()` + 字符串解析？

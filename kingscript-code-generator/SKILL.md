@@ -11,30 +11,36 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 
 ```
 ./
-├── SKILL.md                                    ← 本文件（通用 skill 定义）
-├── CLAUDE.md                                   ← Claude Code 入口
-├── AGENTS.md                                   ← Codex 入口
+├── SKILL.md                                    ← 本文件（通用 skill 入口）
 ├── README.md                                   ← 使用说明
 ├── references/                                 ← 共享知识库
-│   ├── docs/                                     ← 定制开发文档
-│   │   ├── 脚本控制器开发指南.md
-│   │   ├── controller-safe-template.md
-│   │   ├── runtime-bigdecimal.md
-│   │   ├── runtime-bigint.md
-│   │   ├── runtime-date-bridge.md
-│   │   ├── runtime-dynamicobject.md
-│   │   └── faq-runtime-pitfalls.md
-│   ├── examples/                               ← 示例
-│   │   └── plugins/
-│   ├── sdk/                                    ← SDK 索引与声明
+│   ├── language/                                ← 语法规范
+│   ├── sdk/                                     ← SDK 索引与声明
 │   │   ├── indexes/
 │   │   ├── classes/
 │   │   ├── packages/
 │   │   ├── plugins/
 │   │   ├── microservices/
 │   │   └── manifests/
-│   ├── templates/                              ← 插件模板
-│   └── language/                                ← 语法规范
+│   ├── gotchas/                                 ← 公共注意事项与经验
+│   │   ├── bigdecimal.md
+│   │   ├── bigint.md
+│   │   ├── date.md
+│   │   ├── dynamicobject.md
+│   │   └── README.md
+│   ├── docs/                                    ← 各开发类型专属指南
+│   │   ├── 脚本控制器开发指南.md
+│   │   ├── 业务扩展点开发指南.md
+│   │   └── 插件开发指南.md
+│   ├── templates/                               ← 各开发类型模板
+│   │   ├── kwc-controller-template.md
+│   │   ├── extpoint-template.md
+│   │   ├── form-plugin-template.md
+│   │   ├── bill-plugin-template.md
+│   │   ├── ... (其余插件模板)
+│   └── examples/                                ← 示例
+│       ├── plugins/
+│       └── community/
 ├── install.ps1                                 ← Windows 安装脚本
 ├── install.sh                                  ← macOS/Linux 安装脚本
 ├── sdks.zip                                    ← 外部 SDK 扩展包
@@ -54,20 +60,27 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 - `references/examples/plugins/README.md`
 - `references/examples/plugins/插件示例/`
 
+### gotchas
+
+- `references/gotchas/README.md`
+- `references/gotchas/bigdecimal.md`
+- `references/gotchas/bigint.md`
+- `references/gotchas/date.md`
+- `references/gotchas/dynamicobject.md`
+- `references/gotchas/serialization.md`
+
 ### docs
 
 - `references/docs/README.md`
 - `references/docs/脚本控制器开发指南.md`
-- `references/docs/controller-safe-template.md`
-- `references/docs/runtime-bigdecimal.md`
-- `references/docs/runtime-bigint.md`
-- `references/docs/runtime-date-bridge.md`
-- `references/docs/runtime-dynamicobject.md`
-- `references/docs/faq-runtime-pitfalls.md`
+- `references/docs/业务扩展点开发指南.md`
+- `references/docs/插件开发指南.md`
 
 ### templates
 
 - `references/templates/README.md`
+- `references/templates/kwc-controller-template.md`
+- `references/templates/extpoint-template.md`
 
 ### sdk
 
@@ -87,10 +100,13 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 
 1. 先确认 `references/` 目录结构完整
 2. 再找 `references/examples/` 中最接近的示例
-3. 如果用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API`，先读 `references/docs/脚本控制器开发指南.md` 和 `references/docs/controller-safe-template.md`；涉及金额/日期/DynamicObject/BigInt 时分别补读对应 `runtime-*.md`
-4. 如果需要插件骨架或占位代码，读 `references/templates/README.md`
-5. 如果涉及 SDK，先读 `references/sdk/README.md`、`strategy.md` 和 `indexes/`
-6. 如果涉及语法、关键字或语言限制，读 `references/language/README.md`
+3. 如果用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API`，先读 `references/docs/脚本控制器开发指南.md` 和 `references/templates/kwc-controller-template.md`
+4. 如果用户提到 `扩展点`、`extension`、`extpoint`、`业务扩展`，先读 `references/docs/业务扩展点开发指南.md` 和 `references/templates/extpoint-template.md`
+5. 如果用户提到 `插件`、`plugin`、`表单插件`、`单据插件`、`列表插件`、`操作插件`，先读 `references/docs/插件开发指南.md`
+6. 涉及金额/日期/DynamicObject/BigInt 等公共运行时约束，分别补读 `references/gotchas/` 中对应文件
+7. 如果需要插件骨架或占位代码，读 `references/templates/README.md`
+8. 如果涉及 SDK，先读 `references/sdk/README.md`、`strategy.md` 和 `indexes/`
+9. 如果涉及语法、关键字或语言限制，读 `references/language/README.md`
 
 ## 降级查找顺序
 
@@ -115,7 +131,7 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 ### 从 docs 收敛
 
 - 已知是 KWC、脚本控制器、Web API、REST API 开发时，先开 `references/docs/README.md`
-- 再进入 `脚本控制器开发指南.md`
+- 再进入 `references/docs/脚本控制器开发指南.md`
 - 如果只需要某一块规则，可继续在该文档中检索 `permission`、`url`、`request`、`response`、`version` 等关键字
 
 ### 从 sdk 收敛
@@ -159,11 +175,13 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 
 ### 生成或修改代码
 
-- 如果目标是 KWC 脚本控制器，先读 `references/docs/脚本控制器开发指南.md` 与 `references/docs/controller-safe-template.md`
-- 如果涉及金额/数值字段，补读 `references/docs/runtime-bigdecimal.md`
-- 如果涉及日期过滤或 QFilter 日期入参，补读 `references/docs/runtime-date-bridge.md`
-- 如果涉及 `QueryServiceHelper.query` 或 `DynamicObject` 字段读取，补读 `references/docs/runtime-dynamicobject.md`
-- 如果涉及大整数/Long 类型 ID，补读 `references/docs/runtime-bigint.md`
+- 如果目标是 KWC 脚本控制器，先读 `references/docs/脚本控制器开发指南.md` 与 `references/templates/kwc-controller-template.md`
+- 如果目标是业务扩展点，先读 `references/docs/业务扩展点开发指南.md` 与 `references/templates/extpoint-template.md`
+- 如果目标是插件开发，先读 `references/docs/插件开发指南.md`，再根据插件类型选 `references/templates/` 下对应模板
+- 如果涉及金额/数值字段，补读 `references/gotchas/bigdecimal.md`
+- 如果涉及日期过滤或 QFilter 日期入参，补读 `references/gotchas/date.md`
+- 如果涉及 `QueryServiceHelper.query` 或 `DynamicObject` 字段读取，补读 `references/gotchas/dynamicobject.md`
+- 如果涉及大整数/Long 类型 ID，补读 `references/gotchas/bigint.md`
 - 先读 `references/templates/`
 - 再读 `references/examples/` 中最相关的示例
 - 生成代码时优先复用已有插件模板和事件写法
@@ -192,83 +210,11 @@ jar tf '<java_sample_jar>' | Select-String 'SearchSample|TreeViewSample|ReportCo
 
 ### 诊断问题或做风险审查
 
-- 如果问题发生在 KWC controller、接口路由、权限配置、请求响应处理上，先读 `references/docs/脚本控制器开发指南.md`
-- 先找同类场景的 `references/examples/`
-- 再核对 `references/sdk/` 中的类、方法和生命周期说明
+- 按开发类型先读对应指南：KWC → `references/docs/脚本控制器开发指南.md`；扩展点 → `references/docs/业务扩展点开发指南.md`；插件 → `references/docs/插件开发指南.md`
+- 运行时报错或类型异常 → `references/gotchas/README.md` 按症状查坑
+- 找同类场景的 `references/examples/`
+- 核对 `references/sdk/` 中的类、方法和生命周期说明
 - 最后核对 `references/language/README.md` 及相关语法条目
-
-## 运行时兼容性硬约束（P0，KWC/Controller）
-
-脚本控制器代码默认遵循"运行时稳定优先"，而不是"语法现代优先"。
-
-除非项目内已有可运行示例明确验证，否则默认强制以下约束：
-
-1. 禁止默认使用高风险现代语法
-   - 禁用 optional chaining：`?.`
-   - 禁用 nullish coalescing：`??`
-   - 禁用深层对象解构
-   - 禁止对 Java 返回对象直接做链式 JS 调用
-   - 禁止依赖现代浏览器/Node 运行时特性的全局 API 写法
-2. 禁止把 Java 数值对象当原生 JS number 直接处理
-   - 禁用 `Number(value)`、`Number.isFinite(value)`、`value.toFixed(...)`
-   - 禁用 `value + 1` 这类隐式数值运算
-   - 仅做轻量聚合/展示时，使用保守转换：先 `${value}`，再 `parseFloat(...)`，再 `isNaN(...)` 兜底
-3. 日期字段禁止默认按 JS Date 完整等价处理
-   - 不默认假设 Java Date 与 JS `Date` 完全等价
-   - 避免复杂日期运算（时区、`setHours`、叠加偏移）
-   - Date 比较必须用 `compareTo()` 或 `getTime()`，禁止用 `>` `<` 运算符
-   - `getDay()` 返回 1~7（非 JS 的 0~6），周日=1
-   - 禁止直接使用 `row.getDate(field)`，某些字段类型会抛不可捕获异常
-   - 无成熟模板时，优先"宽查询 + 脚本内格式化聚合"
-4. DynamicObject 读取强约束
-   - 统一使用 `row.get('fieldKey')`
-   - 禁止 `row?.get?.(...)`
-   - 禁止对 `row.get(...)` 返回值直接做复杂链式处理
-   - 先取值，再显式转换（字符串/数值）
-   - 字段名必须对照实体元数据确认，不可猜测
-   - 分录字段必须带分录标识前缀（如 `entryentity.kdtest_field`）
-5. 响应数据强约束
-   - 顶层响应必须是对象
-   - 不允许顶层直接返回数组
-   - `response.ok` 入参中所有 JS 原生数据结构必须转为 Java 集合类型：`[]` → `ArrayList`、`{}` → `HashMap`、`Set` → `HashSet`（建议使用 `toJavaSafe()` 递归转换）
-6. 集合遍历约束
-   - `DynamicObjectCollection` 禁止使用 `for-of`，只能用 `size()+get(i)` 或 `iterator`
-7. BigInt/Long 精度约束
-   - Java 返回的 Long/BigInteger ID 必须用 `BigInt()` 包装，禁止赋值给 JS `number`
-   - QFilter 查询中的 ID 必须以 `BigInt` 形式传入
-8. DB 查询约束
-   - `QueryServiceHelper.query` 只有 4 参数签名 `(entity, fields, qfilters, orderBy)`，禁止传入第 5 个参数
-9. 异常处理约束
-   - 禁止使用 `e.message` / `e.getMessage()` / `String(e)`，统一用 `'' + e`
-10. adapterApi 运行时兜底检查
-    - 若前端通过 adapterApi 调用，必须检查 `config.app` 与 `config.isvId` 在运行时可用
-11. KS static 限制
-    - KS 代码中禁止定义 `static` 方法
-    - KS 代码中禁止定义 `static` 变量（含类静态字段、`static readonly`）
-
-## 生成策略（KWC/Controller）
-
-当存在多种写法时，按以下优先级选择：
-
-1. 已有项目/示例明确验证可运行的写法
-2. 保守 ES 子集写法（以运行时稳定为第一目标）
-3. Java 对象桥接风险更低的写法
-4. 可读性更高但运行时风险未知的现代语法（默认降级不用）
-
-## 输出前检查清单（KWC/Controller）
-
-- [ ] 是否出现 `?.` 或 `??`？如有，必须移除或明确给出已验证运行时依据
-- [ ] 是否对金额/数值字段直接使用 `Number()/toFixed()/Number.isFinite()`？如有，必须改为保守转换
-- [ ] 是否对 Java Date 使用了运算符比较或复杂 JS 日期运算？如有，必须改为 `compareTo()`/`getTime()` 或更稳方案
-- [ ] 是否按 JS 0~6 范围使用了 `getDay()` 返回值？（KingScript 实际返回 1~7）
-- [ ] 是否对 QueryServiceHelper.query / DynamicObject 结果统一使用 `row.get('fieldKey')` 读取？
-- [ ] 是否将顶层响应包装为对象，且数组字段已转为 `ArrayList`？
-- [ ] 是否对 `DynamicObjectCollection` 使用了 `for-of`？如有，必须改为 `size()+get(i)` 或 `iterator`
-- [ ] Long/BigInt ID 是否已用 `BigInt()` 包装，而非直接赋值给 `number`？
-- [ ] `QueryServiceHelper.query` 是否只传了 4 个参数？
-- [ ] catch 块中是否使用了 `e.message` / `e.getMessage()`？如有，必须改为 `'' + e`
-- [ ] 若前端走 adapterApi，是否已确认 `config.app` / `config.isvId` 运行时非空？
-- [ ] 是否定义了 `static` 方法或 `static` 变量？如有，必须删除并改为实例级实现
 
 ## 输出约定
 
