@@ -98,23 +98,30 @@ description: "用于处理 Kingscript 定制化任务，包括脚本生成或修
 
 ## 优先阅读
 
-1. **任务起始必须完整加载 `references/gotchas/README.md`**，作为整次会话的运行时约束真相源（详见下一节「约束加载策略」）
-2. 先确认 `references/` 目录结构完整
-3. 再找 `references/examples/` 中最接近的示例
-4. 如果用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API`，先读 `references/docs/脚本控制器开发指南.md` 和 `references/templates/kwc-controller-template.md`
-5. 如果用户提到 `扩展点`、`extension`、`extpoint`、`业务扩展`，先读 `references/docs/业务扩展点开发指南.md` 和 `references/templates/extpoint-template.md`
-6. 如果用户提到 `插件`、`plugin`、`表单插件`、`单据插件`、`列表插件`、`操作插件`，先读 `references/docs/插件开发指南.md`
-7. 若任务命中金额/日期/DynamicObject/BigInt/序列化等具体场景，**一次性**补读 `references/gotchas/` 下对应专题文档（`bigdecimal.md` / `date.md` / `dynamicobject.md` / `bigint.md` / `serialization.md`）
-8. 如果需要插件骨架或占位代码，读 `references/templates/README.md`
-9. 如果涉及 SDK，先读 `references/sdk/README.md`、`strategy.md` 和 `indexes/`
-10. 如果涉及语法、关键字或语言限制，读 `references/language/README.md`
+1. 先确认 `references/` 目录结构完整
+2. 再找 `references/examples/` 中最接近的示例
+3. 如果用户提到 `KWC`、`脚本控制器`、`controller`、`REST API`、`Web API`，先读 `references/docs/脚本控制器开发指南.md` 和 `references/templates/kwc-controller-template.md`
+4. 如果用户提到 `扩展点`、`extension`、`extpoint`、`业务扩展`，先读 `references/docs/业务扩展点开发指南.md` 和 `references/templates/extpoint-template.md`
+5. 如果用户提到 `插件`、`plugin`、`表单插件`、`单据插件`、`列表插件`、`操作插件`，先读 `references/docs/插件开发指南.md`
+6. 如果需要插件骨架或占位代码，读 `references/templates/README.md`
+7. 如果涉及 SDK，先读 `references/sdk/README.md`、`strategy.md` 和 `indexes/`
+8. 如果涉及语法、关键字或语言限制，读 `references/language/README.md`
+9. **编码/诊断/审查类任务**的 gotchas 加载规则见下一节「约束加载策略」，纯概念问答、SDK 符号查询等非编码任务不必加载 gotchas
 
 ## 约束加载策略
 
-所有运行时约束统一收敛到 `references/gotchas/`，上层 `docs/` 指南与 `templates/` 模板通过引用使用。为避免重复文件 I/O 和上下文污染，必须遵守以下加载规则：
+所有运行时约束统一收敛到 `references/gotchas/`，上层 `docs/` 指南与 `templates/` 模板通过引用使用。gotchas 只在真正需要约束检查的编码类任务中加载，且一次性加载常驻上下文，避免重复 I/O 和上下文污染。
 
-- **会话级一次性加载**：`references/gotchas/README.md` 在任务起始时**一次性完整读入**，加载后常驻当次会话上下文，后续整个任务过程中**不得再次 read_file 同一文件**
-- **专题文档同规则**：`bigdecimal.md` / `bigint.md` / `date.md` / `dynamicobject.md` / `serialization.md` 在本次任务首次命中对应场景时一次性完整加载，加载后同样常驻上下文，不重复读取
+### 触发条件（按需加载，非无差别加载）
+
+- ✅ **需要加载**：生成/修改 KingScript 代码、排查运行时异常、代码风险审查、检查现有代码是否违反约束
+- ❌ **无需加载**：解释 SDK 类/方法签名、查询符号所在包、介绍插件/扩展点概念、导航目录结构、讨论语法规则
+
+### 加载规则
+
+- **命中触发条件时一次性完整读入**：进入编码/诊断/审查任务的第一步即**完整**读取 `references/gotchas/README.md`，加载后常驻当次任务上下文
+- **同一任务内不得重复加载**：后续整个任务过程中**不得再次 read_file 同一文件**，即使多次命中「详见坑 X」引用
+- **专题文档同规则**：`bigdecimal.md` / `bigint.md` / `date.md` / `dynamicobject.md` / `serialization.md` 在首次命中对应场景时一次性完整加载并常驻，不重复读取
 - **引用仅作定位锚点**：`docs/` 指南与 `templates/` 模板中出现的「详见坑 X」「详见 `gotchas/README.md` 坑 Y」「详见 `xxx.md`」等表述，仅用于**在已加载的上下文内快速定位**约束条目，**不触发新的文件读取**
 - **禁止约束重复罗列**：`docs/` 与 `templates/` 中不得复制 gotchas 中的约束细节（症状/原因/错写法/正写法），只保留「一句话引用 + 专属要点」；发现重复应收敛回 gotchas
 - **单向引用不可逆**：引用方向固定为 `docs/` → `gotchas/`、`templates/` → `gotchas/`、`docs/` → `templates/`；反向引用（gotchas → docs/templates）严格禁止
