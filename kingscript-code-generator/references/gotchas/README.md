@@ -122,6 +122,87 @@ try {
 - **正确写法**：`row.get(field)` 取值后转字符串解析。
 - **详见**：`dynamicobject.md`
 
+#### 坑 15：QFilter 容器使用 ArrayList 导致查询异常
+
+- **症状**：传入 `QueryServiceHelper.query` 或 `BusinessDataServiceHelper.load` 的 qfilters 参数后，运行时报类型不匹配或查询无结果。
+- **原因**：qfilters 参数（第三参数）必须是 JS 原生数组 `[]`，不能用 `new ArrayList()` 存放 QFilter 对象。
+- **错误写法**：
+
+```ts
+const filters = new ArrayList();
+filters.add(new QFilter("status", "=", "A"));
+QueryServiceHelper.query("entity", "id", filters, "");
+```
+
+- **正确写法**：
+
+```ts
+const filters = [new QFilter("status", "=", "A")];
+QueryServiceHelper.query("entity", "id", filters, "");
+```
+
+#### 坑 16：QFilter "in" 操作符的值使用 JS 数组导致匹配失败
+
+- **症状**：`in` 条件构造后查询结果为空或行为异常。
+- **原因**：QFilter 构造器内部按 Java Collection 匹配 "in" 值，JS 原生数组不被识别。
+- **错误写法**：`new QFilter("field", "in", ["A", "B", "C"])`
+- **正确写法**：
+
+```ts
+import { ArrayList } from "@cosmic/bos-script/java/util";
+
+const values = new ArrayList();
+values.add("A");
+values.add("B");
+values.add("C");
+const filter = new QFilter("field", "in", values);
+```
+
+#### 坑 17：`SaveServiceHelper.save` 传入 entity 字符串导致调用失败
+
+- **症状**：调用 `SaveServiceHelper.save("entityNumber", dyos)` 后保存失败或抛异常。
+- **原因**：`save()` 不接受 entity 名称字符串作为第一参数；1 参数重载接收 `DynamicObject[]`，2 参数重载第二参数为 `boolean`（是否提交快照）。
+- **错误写法**：`SaveServiceHelper.save("bd_material", [obj])`
+- **正确写法**：
+
+```ts
+import { SaveServiceHelper } from "@cosmic/bos-core/kd/bos/servicehelper/operation";
+
+// 通用场景（1 参数）
+SaveServiceHelper.save([obj]);
+
+// 需要提交快照（2 参数）
+SaveServiceHelper.save([obj], true);
+```
+
+- **import 易错点**：正确路径为 `@cosmic/bos-core/kd/bos/servicehelper/operation`；误引 `@cosmic/bos-core/kd/bos/servicehelper` 会加载 `CtSaveServiceHelper`。
+
+#### 坑 18：`QueryServiceHelper.query` 结果不可直接保存
+
+- **症状**：对 query 返回的 DynamicObject 调用 `SaveServiceHelper.save` 后数据未持久化或抛异常。
+- **原因**：`QueryServiceHelper.query` 返回的是只读轻量级查询视图，不含完整元数据（非完整数据包）；只有通过 `BusinessDataServiceHelper` 加载的实体才具备保存能力。
+- **错误写法**：
+
+```ts
+const rs = QueryServiceHelper.query("bd_material", "id,name", filters, "");
+// 试图修改并保存 query 结果 — 失败
+```
+
+- **正确写法**：
+
+```ts
+// 1. 先 query 获取目标 ID
+const rs = QueryServiceHelper.query("bd_material", "id", filters, "");
+const id = rs.next() ? BigInt(rs.get("id")) : null;
+
+// 2. 用 BusinessDataServiceHelper 加载完整对象
+if (id !== null) {
+  const fullObj = BusinessDataServiceHelper.loadSingle(id, "bd_material");
+  fullObj.set("name", "新名称");
+  SaveServiceHelper.save([fullObj]);
+}
+```
+
 ## 专题文档
 
 - `bigdecimal.md` — BigDecimal/金额字段运行时处理约束；`Number()/toFixed()/Number.isFinite()` 禁用与安全替代写法
@@ -133,6 +214,8 @@ try {
 ## 使用建议
 
 - 排查线上异常或不确定属于哪一类时，先查上方"运行时坑位速查"
+- 涉及 QFilter 查询条件构造，特别注意坑 15（容器用 JS 数组）和坑 16（in 值用 ArrayList）
+- 涉及 `SaveServiceHelper.save` 或数据保存操作，注意坑 17（参数签名）和坑 18（query 结果不可保存）
 - 涉及金额/数值字段，优先阅读 `bigdecimal.md`
 - 涉及日期过滤或 QFilter 日期入参，优先阅读 `date.md`
 - 涉及 `QueryServiceHelper.query` 或 `DynamicObject` 字段读取，优先阅读 `dynamicobject.md`
