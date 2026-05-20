@@ -203,7 +203,26 @@ if (id !== null) {
 }
 ```
 
-## 专题文档
+### 开发环境 / IDE 坑位
+
+#### 坑 19：VSCode 无法识别 `this.getModel()` / `this.getView()` 等插件成员，编辑器飘红
+
+- **症状**：在单据插件 / 表单插件脚本中，`this.getModel()`、`this.getView()`、`this.getPageCache()` 等基类成员在 VSCode 中报红，提示属性不存在；但脚本部署到平台后可正常运行。
+- **原因**：VSCode 升级了内置的 TypeScript 版本（≥ 5.10），与脚本 SDK 的 `.d.ts` 解析机制存在兼容性问题，导致继承链上的方法无法被正确识别。问题不在脚本 SDK，而在 IDE 内置 TS 版本。
+- **错误处理**：直接忽略飘红、或者改写为非 `this.` 调用以"绕过"提示——会丢失类型补全和静态检查。
+- **正确处理**：将项目 TypeScript 锁定到 `5.9.3`，并在 VSCode 中切换到工作区版本。
+
+  1. 在脚本工程根目录安装指定版本：
+
+     ```powershell
+     npm install typescript@5.9.3 --save-dev
+     ```
+
+  2. 在 VSCode 中打开任意一个 `.ts` 脚本文件，按 `Ctrl+Shift+P` 调出命令面板，输入并执行 `TypeScript: Select TypeScript Version`，选择 `Use Workspace Version`（即 `node_modules/typescript@5.9.3`）。
+
+- **注意**：`Select TypeScript Version` 是按工作区生效的，需在每个脚本项目首次打开时切换一次；切换后 `this.getModel()` / `this.getView()` 等成员应恢复正常补全。
+
+## 专题文档</text>
 
 - `bigdecimal.md` — BigDecimal/金额字段运行时处理约束；`Number()/toFixed()/Number.isFinite()` 禁用与安全替代写法
 - `bigint.md` — BigInt/Long 类型 ID 运行时处理约束；大整数精度丢失风险与 `BigInt()` 包装规范；QFilter 查询、DynamicObject 读取、BigInt 运算规则
@@ -216,6 +235,7 @@ if (id !== null) {
 - 排查线上异常或不确定属于哪一类时，先查上方"运行时坑位速查"
 - 涉及 QFilter 查询条件构造，特别注意坑 15（容器用 JS 数组）和坑 16（in 值用 ArrayList）
 - 涉及 `SaveServiceHelper.save` 或数据保存操作，注意坑 17（参数签名）和坑 18（query 结果不可保存）
+- 编辑器中 `this.getModel()` / `this.getView()` 等成员飘红、与运行时不一致时，参见坑 19（VSCode TypeScript 版本兼容）
 - 涉及金额/数值字段，优先阅读 `bigdecimal.md`
 - 涉及日期过滤或 QFilter 日期入参，优先阅读 `date.md`
 - 涉及 `QueryServiceHelper.query` 或 `DynamicObject` 字段读取，优先阅读 `dynamicobject.md`
